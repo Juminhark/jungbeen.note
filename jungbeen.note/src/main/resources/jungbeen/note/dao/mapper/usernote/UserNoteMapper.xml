@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="jungbeen.note.usernote.dao.mapper.UserNoteMapper">
+	<select id="selectUserNotes" parameterType="userNote" resultType="userNote">
+		SELECT user_id userId, note_id noteId, note_index noteIdx, is_owner isOwner
+		FROM usernote
+		<where>
+			<if test="userId != null">user_id = #{userId}</if>
+			<if test="noteId != 0">AND note_id = #{noteId}</if>
+		</where>
+		ORDER BY 3 DESC
+	</select>
+	
+	<insert id="insertUserNote" parameterType="userNote">
+		INSERT INTO usernote
+		VALUES (#{userId}, #{noteId}, #{noteIdx}, #{isOwner})
+	</insert>
+	
+	<update id="updateUserNote" parameterType="userNote">
+		UPDATE usernote
+		<set>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="noteId != 0">note_id = #{noteId},</if>
+			<if test="noteIdx != -1">note_index = #{noteIdx},</if>
+			<if test="isOwner != -1">is_owner = #{isOwner}</if>
+		</set>
+		<where>
+			<if test="userId != null">user_id = #{userId}</if>
+			<if test="noteId != 0">AND note_id = #{noteId}</if>
+		</where>
+	</update>
+	
+	<delete id="deleteUserNote" parameterType="userNote">
+		DELETE FROM usernote
+		<where>
+			<if test="userId != null">user_id = #{userId}</if>
+			<if test="noteId != 0">AND note_id = #{noteId}</if>
+		</where>
+	</delete>
+</mapper>

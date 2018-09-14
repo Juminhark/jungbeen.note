@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="jungbeen.note.note.dao.mapper.NoteMapper">
+	<select id="selectNotes" parameterType="string" resultType="note">
+		SELECT note_id id, note_name name, note_color color, share_cnt shareCnt
+		FROM notes
+		WHERE note_id IN 
+  			(SELECT note_id
+ 			 FROM usernote
+  			 WHERE #{userId} = user_id)
+	</select>
+	
+	<select id="selectNote" parameterType="int" resultType="note">
+		SELECT note_id id, note_name name, note_color color, share_cnt shareCnt
+		FROM notes
+		WHERE note_id = #{noteId}
+	</select>
+	
+	<select id="NEXTVAL" resultType="int">
+		SELECT note_noteId_seq.NEXTVAL
+		FROM dual
+	</select>
+	
+	<insert id="insertNote" parameterType="note">
+		INSERT INTO notes
+		VALUES (#{id}, NVL(#{name}, 'new Note'), #{color}, 0)
+	</insert>
+	
+	<update id="updateNote" parameterType="note">
+		UPDATE notes
+		<set>
+			<if test="name != null and !name.equals('')">note_name = #{name},</if>
+			<if test="color != null">note_color = #{color},</if>
+			<if test="shareCnt != -1">share_cnt = #{shareCnt}</if>
+		</set>
+		WHERE note_id = #{id}
+	</update>
+	
+	<delete id="deleteNote" parameterType="note">
+		DELETE FROM notes
+		WHERE note_id = #{id}
+	</delete>
+</mapper>

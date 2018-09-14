@@ -1,0 +1,56 @@
+.demo { /* 화면가운데 창 */
+	  	position: absolute;
+	  	top: 2%;
+	  	left: 95%;
+	  	width: 5rem;
+	  	height: 5rem;
+	  	overflow: hidden;
+		transition-duration:1s;
+	}
+
+svg {
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+  overflow: visible;
+}
+
+.svg-icon {
+  cursor: pointer;
+}
+.svg-icon path {
+  stroke: rgba(255, 255, 255, 0.9);
+  fill: none;
+  stroke-width: 1;
+}
+
+.login__icon {
+  margin-bottom: -0.4rem;
+  margin-right: 0.5rem;
+}
+.login__icon.name path {
+  stroke-dasharray: 73.50196075439453;
+  stroke-dashoffset: 73.50196075439453;
+  -webkit-animation: animatePath 2s 0.5s forwards;
+          animation: animatePath 2s 0.5s forwards;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes animatePath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

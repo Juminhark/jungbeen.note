@@ -1,0 +1,261 @@
+@CHARSET "UTF-8";
+:root {
+		--note-color:black;
+		--note-line-color:gray;
+		--note-page-color:var(--부드러운-살색);
+		--note-name-color:black;
+		
+		--trasition-duration:0s;
+		
+		/*이 값이 note의 각 면을 구성하는 요소들의 길이 비율의 기준이 된다.*/
+		--note-standard-size:100px;
+		
+		--note-shadow-width:100px;
+		--note-shadow-height:150px;
+		
+		--shelf-support-width:;
+		--shelf-support-shadow-color:gray;
+		
+		--background-color:#D8D8D8;
+		
+		--부드러운-살색:#F8ECE0;
+		--연한-회색:#D8D8D8;
+	}
+	.scene {
+		position:absolute;
+		display:inline-block;
+		
+		width:var(--note-standard-size);
+		height:calc(var(--note-standard-size) * 1.5);
+		
+		left:0%;
+		top:0%;
+		
+		margin:0px
+			calc(var(--note-standard-size) * 0.2)
+			calc(var(--note-standard-size) * 0.1) 
+			calc(var(--note-standard-size) * 0.2);
+		
+		perspective:calc(var(--note-standard-size) * 10);
+		transition-duration:var(--transition-duration);
+	}
+	.scene .note {
+		position:relative;
+		
+		width:100%;
+		height:100%;
+		
+		left:0%;
+		top:0%;
+		
+		transition-duration:var(--transition-duration);
+		transform-style:preserve-3d;
+	}
+	.scene .note .side {position:absolute; transition-duration:var(--transition-duration);}
+	.scene .note .front {
+		width:var(--note-standard-size);
+		height:calc(var(--note-standard-size) * 1.5);
+		border-radius:
+			0px 
+			calc(var(--note-standard-size) * 0.05) 
+			calc(var(--note-standard-size) * 0.05) 
+			0px;
+		background-color:var(--note-color, red);
+		
+		transform-style:preserve-3d;
+	}
+	.scene .note .front .name {
+		position:absolute;
+		display:inline;
+		
+		width:calc(var(--note-standard-size) * 0.8 - (var(--note-standard-size) * 0.1));
+		height:calc(var(--note-standard-size) * 1.5 - (var(--note-standard-size) * 0.1));
+		
+		padding:calc(var(--note-standard-size) * 0.05);
+		
+		font-size:calc(var(--note-standard-size) * 0.15);
+		color:var(--note-name-color);
+		
+		overflow:hidden;
+		
+		transition-duration:var(--transition-duration);
+	}
+	.scene .note .line,
+	.scene .note .line-up,
+	.scene .note .line-down {
+		position:absolute;
+		background-color:var(--note-line-color);
+		transition-duration:var(--transition-duration);
+	}
+	.scene .note .front .line {
+		left:calc(var(--note-standard-size) * 0.8);
+		width:calc(var(--note-standard-size) * 0.1);
+		height:calc(var(--note-standard-size) * 1.5);
+	}
+	.scene .note .back {
+		width:var(--note-standard-size);
+		height:calc(var(--note-standard-size) * 1.5);
+		border-radius:
+			calc(var(--note-standard-size) * 0.05)
+			0px
+			0px
+			calc(var(--note-standard-size) * 0.05);
+		background-color:var(--note-color, orange);				
+	}
+	.scene .note .back .line-up,
+	.scene .note .back .line-down {
+		left:calc(var(--note-standard-size) * 0.1);
+		width:calc(var(--note-standard-size) * 0.1);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .back .line-up {}
+	.scene .note .back .line-down {top:calc(var(--note-standard-size) * 1.5 - var(--note-standard-size) * 0.2);}
+	.scene .note .right {
+		left:calc(var(--note-standard-size) * 0.5
+			- var(--note-standard-size) * 0.2 * 0.5);
+		width:calc(var(--note-standard-size) * 0.2);
+		height:calc(var(--note-standard-size) * 1.5);
+		
+		cursor:pointer;
+	}
+	.scene .note .cover {
+		position:absolute;
+		background-color:var(--note-color, yellow);	
+		
+		transition-duration:var(--transition-duration);		
+	}
+	.scene .note .page {
+		position:absolute;
+		background-color:var(--note-page-color);
+		
+		transition-duration:var(--transition-duration);
+	}
+	.scene .note .right .cover {
+		top:calc(var(--note-standard-size) * 0.05);
+		width:calc(var(--note-standard-size) * 0.025);
+		height:calc(var(--note-standard-size) * 1.4);
+	}
+	.scene .note .right .cover:first-child {}
+	.scene .note .right .cover:last-child {left:calc(var(--note-standard-size) * 0.175);}
+	.scene .note .right .page {
+		top:calc(var(--note-standard-size) * 0.05);
+		left:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.15);
+		height:calc(var(--note-standard-size) * 1.4);
+	}
+	.scene .note .left {
+		left:calc(var(--note-standard-size) / 2
+			- var(--note-standard-size) * 0.2 / 2);
+		width:calc(var(--note-standard-size) * 0.2);
+		height:calc(var(--note-standard-size) * 1.5);
+		background-color:var(--note-color, green);
+	}
+	.scene .note .up {
+		top:calc(var(--note-standard-size) *1.5 / 2
+			- var(--note-standard-size) * 0.2 / 2);
+		width:var(--note-standard-size);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .cover-side {
+		position:absolute;
+		transition-duration:var(--transition-duration);
+	}
+	.scene .note .up .cover-side {
+		width:calc(var(--note-standard-size) 0.025);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .up .cover {
+		left:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.925);
+		height:calc(var(--note-standard-size) * 0.025);
+	}
+	.scene .note .up .cover:first-child {}
+	.scene .note .up .cover:last-child {top:calc(var(--note-standard-size) * 0.175);}
+	.scene .note .up .page {
+		left:calc(var(--note-standard-size) * 0.025);
+		top:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.925);
+		height:calc(var(--note-standard-size) * 0.15);
+	}
+	.scene .note .up .line {
+		left:calc(var(--note-standard-size) * 0.8);
+		width:calc(var(--note-standard-size) * 0.1);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .down {
+		top:calc(var(--note-standard-size) * 1.5 / 2
+			- var(--note-standard-size) * 0.2 / 2);
+		width:var(--note-standard-size);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .down .cover-side {
+		width:calc(var(--note-standard-size) * 0.025);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .down .cover {
+		left:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.925);
+		height:calc(var(--note-standard-size) * 0.025);
+	}
+	.scene .note .down .cover:first-child {}
+	.scene .note .down .cover:last-child {top:calc(var(--note-standard-size) * 0.175);}
+	.scene .note .down .page {
+		left:calc(var(--note-standard-size) * 0.025);
+		top:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.925);
+		height:calc(var(--note-standard-size) * 0.15);
+	}
+	.scene .note .down .line {
+		left:calc(var(--note-standard-size) * 0.8);
+		width:calc(var(--note-standard-size) * 0.1);
+		height:calc(var(--note-standard-size) * 0.2);
+	}
+	.scene .note .edge-up, 
+	.scene .note .edge-down {
+		width:calc(var(--note-standard-size) * 0.2);
+		height:calc(var(--note-standard-size) * 0.07071067811865475244008443621048);
+	}
+	.scene .note .edge-up .cover, 
+	.scene .note .edge-down .cover {
+		width:calc(var(--note-standard-size) * 0.025);
+		height:calc(var(--note-standard-size) * 0.07071067811865475244008443621048);
+		background-color:var(--note-color, blue);
+	}
+	.scene .note .edge-up .cover:first-child, 
+	.scene .note .edge-down .cover:first-child {}
+	.scene .note .edge-up .cover:first-child, 
+	.scene .note .edge-down .cover:first-child {
+		left:calc(var(--note-standard-size) * 0.175);
+	}
+	.scene .note .edge-up .page,
+	.scene .note .edge-down .page {
+		left:calc(var(--note-standard-size) * 0.025);
+		width:calc(var(--note-standard-size) * 0.15);
+		height:calc(var(--note-standard-size) * 0.07071067811865475244008443621048);
+	}
+	.scene .note .front {transform:rotateY(0deg) translateZ(calc(var(--note-standard-size) * 0.2 / 2));}
+	.scene .note .back {transform:rotateY(180deg) translateZ(calc(var(--note-standard-size) * 0.2 / 2));}
+	.scene .note .right {transform:rotateY(90deg) translateZ(calc(var(--note-standard-size) / 2));}
+	.scene .note .left {transform:rotateY(-90deg) translateZ(calc(var(--note-standard-size) / 2));}
+	.scene .note .up {transform:rotateX(90deg) translateZ(calc(var(--note-standard-size) * 1.5 / 2));}
+	.scene .note .down {transform:rotateX(-90deg) translateZ(calc(var(--note-standard-size) * 1.5 / 2));}
+	.scene .note .edge-up {
+		left:calc(var(--note-standard-size) - var(--note-standard-size) * 0.2 / 2 - var(--note-standard-size) * 0.05 / 2);
+		top:calc(var(--note-standard-size) * 0.07071067811865475244008443621048 / -2 + var(--note-standard-size) * 0.05 / 2);
+		transform:rotateY(90deg) rotateX(45deg);
+	}
+	.scene .note .edge-down {
+		left:calc(var(--note-standard-size) - var(--note-standard-size) * 0.2 / 2 - var(--note-standard-size) * 0.05 / 2);
+		top:calc(var(--note-standard-size) * 1.5 - var(--note-standard-size) * 0.07071067811865475244008443621048 / 2 - var(--note-standard-size) * 0.05 / 2);
+		transform:rotateY(90deg) rotateX(-45deg);
+	}
+	
+	.show-front {transform:rotateY(0deg);}
+	.show-back {transform:rotateY(180deg);}
+	.show-right {transform:rotateY(-90deg);}
+	.show-left {transform:rotateY(90deg);}
+	.show-up {transform:rotateX(-90deg);}
+	.show-down {transform:rotateX(90deg);}
+	.show-edge-up {transform:otateY(-90deg) rotateZ(45deg);}
+	.show-edge-down {transform:rotateY(-90deg) rotateZ(-45deg);}
+	.show-custom  {transform:rotate(45deg, 45deg)}

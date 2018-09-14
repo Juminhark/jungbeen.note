@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="jungbeen.note.page.dao.mapper.PageMapper">
+	<select id="selectPages" parameterType="int" resultType="page">
+		SELECT note_id noteId, page_id id, page_index idx, page_content1 content1, page_content2 content2, page_content3 content3, page_content4 content4, page_content5 content5
+		FROM pages
+		WHERE note_id = #{noteId}
+  		ORDER BY 2
+	</select>
+	
+	<select id="selectPage" parameterType="page" resultType="page">
+		SELECT note_id noteId, page_id id, page_index idx, page_content1 content1, page_content2 content2, page_content3 content3, page_content4 content4, page_content5 content5
+		FROM pages
+		WHERE note_id = #{noteId} AND page_index = #{idx}
+  		ORDER BY 2
+	</select>
+	
+	<insert id="insertPage" parameterType="page">
+		INSERT INTO pages
+		VALUES (#{noteId}, page_pageId_seq.NEXTVAL, #{idx}, NVL(#{content1}, ''), NVL(#{content2}, ''), NVL(#{content3}, ''), NVL(#{content4}, ''), NVL(#{content5}, ''))
+	</insert>
+	
+	<update id="updatePage" parameterType="page">
+		UPDATE pages
+		<set>
+			<if test="idx != -1">page_index = #{idx, jdbcType=NUMERIC},</if>
+			<if test="content1 != null">page_content1 = #{content1, jdbcType=VARCHAR},</if>
+			<if test="content2 != null">page_content2 = #{content2, jdbcType=VARCHAR},</if>
+			<if test="content3 != null">page_content3 = #{content3, jdbcType=VARCHAR},</if>
+			<if test="content4 != null">page_content4 = #{content4, jdbcType=VARCHAR},</if>
+			<if test="content5 != null">page_content5 = #{content5, jdbcType=VARCHAR}</if>
+		</set>
+		WHERE page_id = #{id}
+	</update>
+	
+	<delete id="deletePage" parameterType="page">
+		DELETE FROM pages
+		WHERE note_id = #{noteId}
+	</delete>
+</mapper>

@@ -1,582 +1,421 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="/note/js/utility.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
-window.onload = function() {
-	var form = document.querySelector(".form");
-	var reg = form.querySelector(".reg");
-	var name = form.querySelector(".name");
-	var id = form.querySelector(".id");
-	var pw = form.querySelector(".pw");
-	var cpw = form.querySelector(".confirm-pw");
-	var email = form.querySelector(".email");
-	var back = form.querySelector(".back");
-	var create = form.querySelector(".create");
+$(function(){
+	var $inputName = $("input[name='userName']"); //이름 입력창
+	var $inputId = $("input[name='userId']");     //아이디 입력창
+	var $inputPw = $("input[name='userPw']");     //비밀번호 입력창
+	var $checkPw = $("input[name='checkPw']");    //비밀번호 확인 입력창
+	var $inputEmail = $("input[name='userEmail']");    //이메일 입력창
 	
-	show(name);
-	show(id);
-	show(pw);
-	show(cpw);
-	show(email);
+	//계정만들기 오픈 효과	
+	$(".demo").css('height','53rem');
+	$("#back").css('top','47rem');
+	$("#next").css('top','47rem');
 	
-	create.onclick = function(e) {
-		ajax({
-			url:"/note/addUser",
-			method:"post",
-			param:[
-			       {name:"userName", value:name.children[0].value},
-			       {name:"userId", value:id.children[0].value},
-			       {name:"userPw", value:pw.children[0].value},
-			       {name:"userEmail", value:email.children[0].value}
-			],
-			success:function(r) {
-				if(r) {
-					setTimeout(function() {
-						hide(name);
-						hide(id);
-						hide(pw);
-						hide(cpw);
-						hide(email);
-						hide(back);
-						hide(create);
-						document.querySelector(".okay").style.opacity = "1";
-						
-						setTimeout(function() {
-							ok(0);
-							
-							var size;
-							
-							if(window.innerWidth < window.innerHeight)
-								size = window.innerWidth * 0.3;
-							else
-								size = window.innerHeight * 0.3;
-							
-							size = Math.round(size);
-							
-							setCssVar("form-height", size + "px");
-							
-							setTimeout(function() {
-								location.href = "/note";
-							}, 1000);
-						}, 1000);
-					}, 500);
-				} else {
-					hide(name);
-					hide(id);
-					hide(pw);
-					hide(cpw);
-					hide(email);
-					hide(back);
-					hide(create);
-					document.querySelector(".nope").style.opacity = "1";
-					
-					setTimeout(function() {
-						no(0);
-						
-						var size;
-						
-						if(window.innerWidth < window.innerHeight)
-							size = window.innerWidth * 0.3;
-						else
-							size = window.innerHeight * 0.3;
-						
-						size = Math.round(size);
-						
-						setCssVar("form-height", size + "px");
-						
-						setTimeout(function() {
-							location.href = "/note";
-						}, 1000);
-					}, 500);
-				}
-			}
-		});
-	}
-	console.log("asd");
-	back.onclick = function(e) {
-		hide(name);
-		hide(id);
-		hide(pw);
-		hide(cpw);
-		hide(email);
-		hide(back);
-		
-		setTimeout(function() {
-			create.style.top = "calc(60% - var(--form-width) * 0.2 / 2)";
-			create.style.left = "calc(50% - var(--form-width) * 0.5 / 2)";
-			
-			var size;
-			
-			if(window.innerWidth < window.innerHeight)
-				size = window.innerWidth * 0.3;
-			else
-				size = window.innerHeight * 0.3;
-			
-			size = Math.round(size);
-			
-			setCssVar("form-height", size + "px");
-			setTimeout(function() {
-				location.href = "/note";			
-			}, 250);
-		}, 250);
-	}
+	setTimeout(function() {$("#nameCheck").css('opacity','1');}, 500);
+	setTimeout(function() {$("#idCheck").css('opacity','1');}, 500);
+	setTimeout(function() {$("#pw").css('opacity','1');}, 500);
+	setTimeout(function() {$("#pwCheck").css('opacity','1');}, 500);
+	setTimeout(function() {$("#email").css('opacity','1');}, 500);
+	setTimeout(function() {$("#back").css('opacity','1');}, 500);
+	setTimeout(function() {$("#next").css('opacity','1');}, 500);
+	setTimeout(function() {$inputName.focus();}, 1200);
 	
-	name.children[0].focus();
+	// 이름 입력창에서 enter를 눌렀을 때 값이 있으면 아이디 입력창으로 이동. 
+	$inputName.bind("keydown", function(event){
+		if(event.which == 13){
+			if($inputName.val() != ""){
+				$('#nameCheck input + span').css('color','#0077FF'); 
+				$('#nameCheck .border').css('background','#0077FF');
+				$('#nameCheck input').css('border-bottom','2px solid #0077FF');	
+				$("#nameError").text("이름 확인 완료");
+				$inputId.focus();
+			}else{
+				$('#nameCheck input + span').css('color','#a30404');
+				$('#nameCheck .border').css('background','#a30404');
+				$('#nameCheck input').css('border-bottom','2px solid #a30404');
+				$("#nameError").text("이름이입력되지않았습니다");
+			}		
+		}
+	});
 	
-	name.children[0].onkeydown = function(e) {
-		if(e.keyCode == 13)
-			if(this.value.length > 0) {
-				on(1);
-				ok(1);
-				id.children[0].focus();
-			} else {
-				ko(1);
-				no(1);
-			}
-	}
+	// tab키로 넘어갈때를 입력값이 있으면 확인
+	$inputName.focusout(function(){
+		if($inputName.val() != ""){
+			$('#nameCheck input + span').css('color','#0077FF'); 
+			$('#nameCheck .border').css('background','#0077FF');
+			$('#nameCheck input').css('border-bottom','2px solid #0077FF');	
+			$("#nameError").text("이름 확인 완료");
+			$inputId.focus();
+		}
+	});
 	
-	id.children[0].onkeydown = function(e) {
-		if(e.keyCode == 13) {
-			var id = this.value;
-			ajax({
-				url:"/note/idCheck",
-				method:"post",
-				param:[{name:"userId", value:id}],
-				success:function(response) {
-					if(response) {
-						on(2);
-						ok(2);
-						pw.children[0].focus();
-					} else {
-						ko(2);
-						no(2);
+	// 아이디 입력창에서 enter를 눌렀을때 값이 있으면 중복 확인 후 
+	$inputId.bind("keydown", function(event) {
+		if(event.which == 13) {
+			if($inputId.val() != ""){
+				$.ajax({
+					method: "post",
+					url:"idCheck",
+					data:{
+						userId:$inputId.val()
+					},
+					success:function(result){
+						if(result){
+							$('#idCheck input + span').css('color','#0077FF'); 
+							$('#idCheck .border').css('background','#0077FF');
+							$('#idCheck input').css('border-bottom','2px solid #0077FF');	
+							$("#idError").text("사용 가능한 아이디입니다");
+							$inputPw.focus();
+						}else{
+							$('#idCheck input + span').css('color','#a30404'); 
+							$('#idCheck .border').css('background','#a30404');
+							$('#idCheck input').css('border-bottom','2px solid #a30404');		
+							$("#idError").text("이미 있는 아이디입니다");
+						}
+					},
+					error:function(){
+						alert("서버오류.")
 					}
+				})
+			}else{
+				$('#idCheck input + span').css('color','#a30404'); 
+				$('#idCheck .border').css('background','#a30404');
+				$('#idCheck input').css('border-bottom','2px solid #a30404');
+				$("#idError").text("아이디가 입력되지않았습니다");
+			}
+
+		}
+	});
+	
+	// tab키로 넘어갈때를 입력값이 있으면 확인
+	$inputId.focusout(function(){
+		if($inputId.val() != ""){
+			$.ajax({
+				method: "post",
+				url:"idCheck",
+				data:{
+					userId:$inputId.val()
+				},
+				success:function(result){
+					if(result){
+						$('#idCheck input + span').css('color','#0077FF'); 
+						$('#idCheck .border').css('background','#0077FF');
+						$('#idCheck input').css('border-bottom','2px solid #0077FF');	
+						$("#idError").text("사용 가능한 아이디입니다");
+						$inputPw.focus();
+					}else{
+						$('#idCheck input + span').css('color','#a30404'); 
+						$('#idCheck .border').css('background','#a30404');
+						$('#idCheck input').css('border-bottom','2px solid #a30404');		
+						$("#idError").text("이미 있는 아이디입니다");
+					}
+				},
+				error:function(){
+					alert("서버오류.")
 				}
-			});
+			})
 		}
-	}
+	});
 	
-	pw.children[0].onkeydown = function(e) {
-		if(e.keyCode == 13)
-			if(this.value.length > 8) {
-				ok(3);
-				on(3);
-				cpw.children[0].focus();
-			} else {
-				ko(3);
-				no(3);
-			}
-	}
+	// 비밀번호 입력창에서 enter누를때 
+	$inputPw.bind("keydown", function(event) {
+		if(event.which == 13) {
+			if($inputPw.val() != ""){
+				$('#pw input + span').css('color','#0077FF'); 
+				$('#pw .border').css('background','#0077FF');
+				$('#pw input').css('border-bottom','2px solid #0077FF');	
+				$("#pwError").text("암호 입력 완료");
+				$checkPw.focus();
+			}else{
+				$('#pw input + span').css('color','#a30404');  
+				$('#pw .border').css('background','#a30404');  
+				$('#pw input').css('border-bottom','2px solid #a30404'); 
+				$("#pwError").text("암호가 입력되지않았습니다");
+			}	
+		}
+	});
 	
-	cpw.children[0].onkeydown = function(e) {
-		if(e.keyCode == 13)
-			if( this.value == pw.children[0].value) {
-				on(4);
-				ok(4);
-				email.children[0].focus();
-			} else {
-				ko(4);
-				no(4);
-			}
-	}
+	// tab키로 넘어갈때를 입력값이 있으면 확인
+	$inputPw.focusout(function(){
+		if($inputPw.val() != ""){
+			$('#pw input + span').css('color','#0077FF'); 
+			$('#pw .border').css('background','#0077FF');
+			$('#pw input').css('border-bottom','2px solid #0077FF');	
+			$("#pwError").text("암호 입력 완료");
+			$checkPw.focus();
+		}
+	});
 	
-	email.children[0].onkeydown = function(e) {
-		if(e.keyCode == 13) {
-			if(this.value.length > 0) {
-				ok(5);
-				on(5);
-				
-				triggerEvent(create, "click");
-			} else {
-				ko(5);
-				no(5);
+	//'비밀번호'와 '비밀번호 확인'을 비교.
+	$checkPw.bind("keydown", function(event) {
+		if(event.which == 13) {
+			if( $checkPw.val() != ""){
+				var input = $("input[name='userPw']").val();
+				var check = $("input[name='checkPw']").val();
+				if(input == check){	
+					$('#pwCheck input + span').css('color','#0077FF'); 
+					$('#pwCheck .border').css('background','#0077FF');
+					$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+					$("#pwckError").text("비밀번호 확인 완료");
+					$inputEmail.focus();
+				}else{
+					$('#pwCheck input + span').css('color','#a30404'); 
+					$('#pwCheck .border').css('background','#a30404');
+					$('#pwCheck input').css('border-bottom','2px solid #a30404');		
+					$("#pwckError").text("비밀번호가 틀렸습니다");
+				}
+			}else{
+				$('#pwCheck input + span').css('color','#a30404'); 
+				$('#pwCheck .border').css('background','#a30404');
+				$('#pwCheck input').css('border-bottom','2px solid #a30404');		
+				$("#pwckError").text("비밀번호 확인이 입력되지않았습니다");
+			}		
+		}
+	});
+	
+	// tab키로 넘어갈때를 입력값이 있으면 확인
+	$checkPw.focusout(function(){
+		if( $checkPw.val() != ""){
+			var input = $("input[name='userPw']").val();
+			var check = $("input[name='checkPw']").val();
+			if(input == check){	
+				$('#pwCheck input + span').css('color','#0077FF'); 
+				$('#pwCheck .border').css('background','#0077FF');
+				$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+				$("#pwckError").text("비밀번호 확인 완료");
+				$inputEmail.focus();
+			}else{
+				$('#pwCheck input + span').css('color','#a30404'); 
+				$('#pwCheck .border').css('background','#a30404');
+				$('#pwCheck input').css('border-bottom','2px solid #a30404');		
+				$("#pwckError").text("비밀번호가 틀렸습니다");
 			}
 		}
-	}
+	})
 	
-	function getCssVar(variable) {
-		return document.querySelector(":root").style.getPropertyValue("--" + variable);
-	}
-
-	function setCssVar(name, value) {
-		document.querySelector(":root").style.setProperty("--" + name, value);
-	}
+	// 이메일 입력창에서 enter누를때
+	$inputEmail.bind("keydown", function(event) {
+		if(event.which == 13) {
+			var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+			if($inputEmail.val() == ""){	
+				$('#email input + span').css('color','#a30404');
+				$('#email .border').css('background','#a30404');
+				$('#email input').css('border-bottom','2px solid #a30404'); 
+				$("#emailError").text("이메일이 입력되지않았습니다");	
+			}else if(exptext.test($inputEmail.val())==false){
+				$('#email input + span').css('color','#a30404');
+				$('#email .border').css('background','#a30404');
+				$('#email input').css('border-bottom','2px solid #a30404'); 
+				$("#emailError").text("이메일형식이 아닙니다");
+			}else{
+				$('#email input + span').css('color','#0077FF'); 
+				$('#email .border').css('background','#0077FF');
+				$('#email input').css('border-bottom','2px solid #0077FF');
+				$("#emailError").text("이메일 확인완료");
+				$("#next").click();
+			}
+		}
+	});
 	
-	function hide(el) {
-		el.style.opacity = "0";
+	// tab키로 넘어갈때를 입력값이 있으면 확인
+	$inputEmail.focusout(function(){
+		var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+		if($inputEmail.val() ==""){	
+			$('#email input + span').css('color','#a30404');
+			$('#email .border').css('background','#a30404');
+			$('#email input').css('border-bottom','2px solid #a30404'); 
+			$("#emailError").text("이메일이 입력되지않았습니다");	
+		}else if(exptext.test($inputEmail.val())==false){
+			$('#email input + span').css('color','#a30404');
+			$('#email .border').css('background','#a30404');
+			$('#email input').css('border-bottom','2px solid #a30404'); 
+			$("#emailError").text("이메일형식이 아닙니다");
+		}else{
+			$('#email input + span').css('color','#0077FF'); 
+			$('#email .border').css('background','#0077FF');
+			$('#email input').css('border-bottom','2px solid #0077FF');
+			$("#emailError").text("이메일 확인완료");
+			$("#next").click();
+		}	
+	});
+	
+	$("#next").bind("click", function(){
+		// 입력값 검사
+		if($inputName.val() == ""){
+			$('#nameCheck input + span').css('color','#a30404');
+			$('#nameCheck .border').css('background','#a30404');
+			$('#nameCheck input').css('border-bottom','2px solid #a30404'); 
+			$("#nameError").text("이름이 입력되지않았습니다");		
+		}else{
+			$("#nameCheck").css('opacity','0');	
+			$("#nameError").css('opacity','0');	
+		}
+		if($inputId.val() ==""){
+			$('#idCheck input + span').css('color','#a30404'); 
+			$('#idCheck .border').css('background','#a30404');
+			$('#idCheck input').css('border-bottom','2px solid #a30404');		
+			$("#idError").text("아이디가 입력되지않았습니다");			
+		}else{
+			$("#idCheck").css('opacity','0');
+			$("#idError").css('opacity','0');	
+		}
+		if($inputPw.val() ==""){
+			$('#pw input + span').css('color','#a30404'); 
+			$('#pw .border').css('background','#a30404');
+			$('#pw input').css('border-bottom','2px solid #a30404');		
+			$("#pwError").text("비밀번호가 입력되지않았습니다");
+		}else{
+			$("#pw").css('opacity','0');
+			$("#pwError").css('opacity','0');	
+		}
+		if($checkPw.val() ==""){
+			$('#pwCheck input + span').css('color','#a30404'); 
+			$('#pwCheck .border').css('background','#a30404');
+			$('#pwCheck input').css('border-bottom','2px solid #a30404');		
+			$("#pwckError").text("비밀번호확인이 입력되지않았습니다");
+		}else{
+			$("#pwCheck").css('opacity','0');
+			$("#pwchError").css('opacity','0');	
+		}
+		if($inputEmail.val() ==""){
+			$('#email input + span').css('color','#a30404');
+			$('#email .border').css('background','#a30404');
+			$('#email input').css('border-bottom','2px solid #a30404'); 
+			$("#emailError").text("이메일이 입력되지않았습니다");	
+		}else{
+			$("#email").css('opacity','0');
+			$("#emailError").css('opacity','0');	
+		}
+	
+		// 입력하지않은곳으로 포커스 이동
+		if($inputName.val() == ""){
+			$inputName.focus();	
+		}else if($inputId.val() ==""){
+			$inputId.focus();		
+		}else if($inputPw.val() ==""){
+			$inputPw.focus();
+		}else if($checkPw.val() ==""){
+			$checkPw.focus();
+		}else if($inputEmail.val() ==""){
+			$inputEmail.focus();	
+		}else{
+			$.ajax({
+				method: "post",
+				data:$("#userData").serialize(),
+				success:function(result){
+					if(result){
+						window.location.href="http://localhost/note/main";
+					}else{
+						alert("가입실패")
+					}
+				},
+				error:function(){
+					alert("서버 에러");
+				}
+			})
+		}		
+	})	
+	
+	
+	// back : 로그인으로 이동
+	$("#back").bind("click", function(){	
+		$("#nameCheck").css('opacity','0');	
+		setTimeout(function() {$("#idCheck").css('opacity','0');}, 500);
+		setTimeout(function() {$("#pw").css('opacity','0');}, 500);
+		setTimeout(function() {$("#pwCheck").css('opacity','0');}, 500);
+		setTimeout(function() {$("#email").css('opacity','0');}, 500);	
 		setTimeout(function() {
-			el.style.display = "none";
+			$(".demo").css('height','30rem');
+			$("#back").css('top','23rem');
+			$("#next").css('top','23rem');
 		}, 500);
-	}
-	
-	function show(el) {
-		el.style.display = "block";
-		el.style.opacity = "1";
-	}
-	
-	var okay = document.querySelectorAll(".okay");
-	var okayLeft = document.querySelectorAll(".okay-left");
-	var okayRight = document.querySelectorAll(".okay-right");
-	
-	for(var i = 0; i < okay.length; i++)
-		ko(i);
-	
-	function ko(idx) {
-		okayRight[idx].style.height = "0px";
-		okayRight[idx].style.top = "80%";
-		
-		setTimeout(function() {
-			okayLeft[idx].style.height = "0px";
-			okayLeft[idx].style.left = "7.5%";
-		}, 200);		
-	}
-	
-	function ok(idx) {
-		okayLeft[idx].style.height = "calc(var(--okay-size) / 6 * 2)";
-		okayLeft[idx].style.left = "calc(var(--okay-size) / 6 * 2)";
-		
-		setTimeout(function() {
-			okayRight[idx].style.height = "calc(var(--okay-size) / 6 * 5)";
-			okayRight[idx].style.top = "calc(var(--okay-size) / 4 * 3.25 - var(--okay-size)  / 6 * 5)";
-		}, 150);
-	}
-	
-	var nope = document.querySelectorAll(".nope");
-	var nopeLeft = document.querySelectorAll(".nope-left");
-	var nopeRight = document.querySelectorAll(".nope-right");
-	
-	for(var i = 0; i < nope.length; i++)
-		on(i);
-	
-	function on(idx) {
-		nopeLeft[idx].style.transform = "rotate(-45deg)";
-		
-		setTimeout(function() {
-			nopeLeft[idx].style.height = "0px";
-			nopeLeft[idx].style.left = "10%";
-			nopeLeft[idx].style.top = "10%";
-			
-			nopeRight[idx].style.height = "0px";
-			nopeRight[idx].style.left = "10%";
-			nopeRight[idx].style.top = "10%";
-		}, 50);
-	}
-	
-	function no(idx) {
-		nopeLeft[idx].style.height = "var(--nope-size)";
-		nopeLeft[idx].style.left = "calc(var(--nope-size) / 2 - var(--nope-size) / 12 / 2)";
-		nopeLeft[idx].style.top = "0px";
-		
-		nopeRight[idx].style.height = "var(--nope-size)";
-		nopeRight[idx].style.left = "calc(var(--nope-size) / 2 - var(--nope-size) / 12 / 2)";
-		nopeRight[idx].style.top = "0px";
-		
-		setTimeout(function() {
-			nopeLeft[idx].style.transform = "rotate(45deg)";
-		}, 50);
-	}
-
-	
-	function resizeForm(ratio) {
-		var size;
-		
-		if(window.innerWidth < window.innerHeight)
-			size = window.innerWidth * ratio;
-		else
-			size = window.innerHeight * ratio;
-		
-		size = Math.round(size);
-		
-		setCssVar("form-width", size + "px");
-	}
-	
-	resizeForm(0.3);
-	
-	window.onresize = function(e) {
-		resizeForm(0.3);
-	}
-}
+		setTimeout(function() {$("#back").css('opacity','0');}, 500);
+		setTimeout(function() {$("#next").css('opacity','0');}, 500);
+		setTimeout(function() {window.location.href="http://localhost/note/logout";}, 1200);
+	});
+})
 </script>
+
 <style>
-:root {
-	--form-width:300px;
-	--form-height:calc(var(--form-width) / 3 * 4);
-	--okay-size:20px;
-	--nope-size:20px;
-}
-.form {
-	position:fixed;
-	
-	width:var(--form-width);
-	height:var(--form-height);
-	
-	left:calc(50% - var(--form-width) / 2);
-	top:calc(50% - var(--form-height) / 2);
-	
-	border-radius:calc(var(--form-width) * 0.05);
-	
-	background-color:LightGray;
-
-	box-shadow:0px 0px 10px 1px rgba(0, 0, 0, 0.5);
-	
-	opacity:1; 
-	transition-duration:0.25s;
-}
-.form>* {
-	opacity:0;
-	
-	position:absolute;
-	
-	width:calc(var(--form-width) * 0.5);
-	height:calc(var(--form-width) * 0.2);
-	
-	left:calc(50% - var(--form-width) * 0.5 / 2);
-
-	text-align:center;
-	
-	transition-duration:0.25s;
-}
-.form .name {
-	top:calc(20% - var(--form-width) * 0.2 / 2);
-}
-.form .id {
-	top:calc(35% - var(--form-width) * 0.2 / 2);
-}
-.form .pw {
-	top:calc(50% - var(--form-width) * 0.2 / 2);
-}
-.form .confirm-pw {
-	top:calc(65% - var(--form-width) * 0.2 / 2);
-}
-.form .email {
-	top:calc(80% - var(--form-width) * 0.2 / 2);
-}
-.form .back {
-	opacity:1;
-
-	left:calc(15% - var(--form-width) * 0.5 / 2);
-	top:calc(92.5% - var(--form-width) * 0.2 / 2);
-}
-.form .create {
-	opacity:1;
-
-	left:calc(80% - var(--form-width) * 0.5 / 2);
-	top:calc(92.5% - var(--form-width) * 0.2 / 2);
-}
-.form span {
-	position:absolute;
-	
-	width:100%;
-	height:1em;
-	
-	left:0px;
-	top:calc(50% - 0.5em);
-	
-	text-align:center;
-	font-size:calc(var(--form-width) * 0.075);
-	color:gray;
-	
-	transition-duration:0.25s;
-}
-.form input {
-	position:absolute;
-	
-	width:100%;
-	height:100%;
-	
-	left:0px;
-	top:0px;
-	
-	border:0px;
-	outline:0px;
-	margin:0px;
-	padding:0px;
-	
-	text-align:center;
-	font-size:calc(var(--form-width) * 0.075);
-	color:gray;
-	
-	background-color:transparent;
-	
-	transition-duration:0.25s;
-}
-.okay {
-	position:absolute;
-	
-	width:var(--okay-size);
-	height:var(--okay-size);
-
-	left:110%;
-	top:30%;
-}
-.okay .okay-left {
-	position:absolute;
-	
-	width:calc(var(--okay-size) / 12);
-	height:calc(var(--okay-size) / 6 * 2);
-	
-	left:calc(var(--okay-size) / 6 * 2);
-	top:calc(var(--okay-size) / 4 * 3.25 - var(--okay-size) / 6 * 2);
-	
-	border-radius:calc(var(--okay-size) / 12 / 2);
-	
-	transform-origin:left bottom;
-	transform:rotate(-45deg);
-	
-	background-color:green;
-	
-	transition-duration:0.25s;
-}
-.okay .okay-right {
-	position:absolute;
-	
-	width:calc(var(--okay-size) / 12);
-	height:calc(var(--okay-size) / 6 * 5);
-	
-	left:calc(var(--okay-size) / 6 * 2 - var(--okay-size) / 12);
-	top:calc(var(--okay-size) / 4 * 3.25 - var(--okay-size)  / 6 * 5);
-	
-	border-radius:calc(var(--okay-size) / 12 / 2);
-	
-	transform-origin:right bottom;
-	transform:rotate(45deg);
-	
-	background-color:green;
-	
-	transition-duration:0.25s;
+@import "/note/css/user.css";
+#idError{font-size: 1em;}
+.inp{
+	opacity: 0;
+	transition-duration:1s;
 }
 
-.nope {
-	position:absolute;
-	
-	width:var(--nope-size);
-	height:var(--nope-size);
-	
-	left:110%;
-	top:30%;
-}
-.nope .nope-left {
-	position:absolute;
-	
-	width:calc(var(--nope-size) / 12);
-	height:var(--nope-size);
-	
-	left:calc(var(--nope-size) / 2 - var(--nope-size) / 12 / 2);
-	top:0px;
-	
-	border-radius:calc(var(--nope-size) / 12 / 2);
-	
-	background-color:red;
-	
-	transform:rotate(45deg);
-	
-	transition-duration:0.25s;
-}
-.nope .nope-right {
-	position:absolute;
-	
-	width:calc(var(--nope-size) / 12);
-	height:var(--nope-size);
-	
-	left:calc(var(--nope-size) / 2 - var(--nope-size) / 12 / 2);
-	top:0px;
-	
-	border-radius:calc(var(--nope-size) / 12 / 2);
-	
-	background-color:red;
-	
-	transform:rotate(-45deg);
-	
-	transition-duration:0.25s;
+#back{
+	position : absolute;
+	left : 5rem;
+	top : 23rem;
+	border :none;
+	opacity: 0;
+	background-color : transparent;
+	transition-duration:1s;
 }
 
+#next{
+	position : absolute;
+	left : 31rem;
+	top : 23rem;
+	border :none;
+	opacity: 0;
+	background-color : transparent;
+	transition-duration:1s;
+}
 
-body {
-	background-color:gray;
+#nameError{
+	opacity: 1;
+	transition-duration:1s;
+}
+#idError{
+	opacity: 1;
+	transition-duration:1s;
+}
+#pwError{
+	opacity: 1;
+	transition-duration:1s;
+}
+#pwckError{
+	opacity: 1;
+	transition-duration:1s;
+}
+#emailError{
+	opacity: 1;
+	transition-duration:1s;
 }
 </style>
+
 </head>
 <body>
-
-<div class="form">
-	<div class="okay" style="--okay-size:100px; left:calc(50% - 50px); top:calc(50% - 50px)">
-		<div class="okay-left"></div>
-		<div class="okay-right"></div>
-	</div>
-	
-	<div class="nope" style="--nope-size:100px; left:calc(50% - 50px); top:calc(50% - 50px)">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
-		</div>
-
-	<div class="name">
-		<input type="text" placeholder="Name">
-		<div class="okay">
-			<div class="okay-left"></div>
-			<div class="okay-right"></div>
-		</div>
-		
-		<div class="nope">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
+<form method="post" id="userData">
+	<div class="cont">
+		<div class="demo">
+			<div class="login">
+				<label for="inp" class="inp" id="nameCheck"><input type="text" name="userName" placeholder="&nbsp;" autocomplete="off"><span class="label">이름</span><span class="border"></span></label>
+				<p id="nameError">&nbsp;</p>
+				<label for="inp" class="inp" id="idCheck"><input type="text" name="userId" placeholder="&nbsp;" autocomplete="off"><span class="label">아이디</span><span class="border"></span></label>
+				<p id="idError">&nbsp;</p>
+				<label for="inp" class="inp" id="pw"><input type="password" name="userPw" placeholder="&nbsp;"><span class="label">비밀번호</span><span class="border"></span></label>
+				<p id="pwError">&nbsp;</p>
+				<label for="inp" class="inp" id="pwCheck"><input type="password" name="checkPw" placeholder="&nbsp;"><span class="label">비밀번호확인</span><span class="border"></span></label>
+				<p id="pwckError">&nbsp;</p>
+				<label for="inp" class="inp" id="email"><input type="email" name="userEmail" placeholder="&nbsp;"><span class="label">이메일</span><span class="border"></span></label>
+				<p id="emailError">&nbsp;</p>
+				<button type="button" id="back"><img src="img/back.png"></button>
+				<button type="button" id="next"><img src="img/next.png"></button>
+			</div>
 		</div>
 	</div>
-	
-	<div class="id">
-		<input type="text" placeholder="ID">
-		<div class="okay">
-			<div class="okay-left"></div>
-			<div class="okay-right"></div>
-		</div>
-		
-		<div class="nope">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
-		</div>
-		
-	</div>
-	
-	<div class="pw">
-		<input type="password" placeholder="Password">
-		<div class="okay">
-			<div class="okay-left"></div>
-			<div class="okay-right"></div>
-		</div>
-		
-		<div class="nope">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
-		</div>
-	</div>
-	
-	<div class="confirm-pw">
-		<input type="password" placeholder="Password">
-		<div class="okay">
-			<div class="okay-left"></div>
-			<div class="okay-right"></div>
-		</div>
-		
-		<div class="nope">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
-		</div>
-	</div>
-	<div class="email">
-		<input type="email" placeholder="Email">
-		<div class="okay">
-			<div class="okay-left"></div>
-			<div class="okay-right"></div>
-		</div>
-		
-		<div class="nope">
-			<div class="nope-left"></div>
-			<div class="nope-right"></div>
-		</div>
-	</div>
-	
-	<div class="back"><span>&lt; Back</span></div>
-	<div class="create"><span>Create &gt;</span></div>
-</div>
-
+</form>
 </body>
 </html>

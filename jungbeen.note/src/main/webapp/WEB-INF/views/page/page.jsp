@@ -49,7 +49,7 @@ window.onload = function() {
 		setCssVar("page-size-ratio", pageSizeRatio);
 	}
 
-	function sync(success) {
+	function sync() {
 		var content = page.innerHTML;
 		
 		content = content.replace(/&nbsp;/g, " ");
@@ -60,6 +60,8 @@ window.onload = function() {
 		var content3 = "";
 		var content4 = "";
 		var content5 = "";
+		
+		var success = true;
 		
 		if(0 <= content.length && content.length < 4000)
 			content1 = content.substring(0, content.length);
@@ -89,21 +91,25 @@ window.onload = function() {
 			content4 = content.substring(12000, 16000);
 			content5 = content.substring(16000, content.length);
 			
+		} else {
+			success = false;
 		}
 		
-		ajax({
-			url:"/note/page/upContent",
-			method:"post",
-			param:[
-			       {name:"id", value:"<%= ((Page)request.getAttribute("page")).getId() %>"},
-			       {name:"content1", value:content1},
-			       {name:"content2", value:content2},
-			       {name:"content3", value:content3},
-			       {name:"content4", value:content4},
-			       {name:"content5", value:content5}
-			       ],
-			success:success
-		});
+		if(success)
+			ajax({
+				url:"/note/page/upContent",
+				method:"post",
+				param:[
+				       {name:"id", value:"<%= ((Page)request.getAttribute("page")).getId() %>"},
+				       {name:"content1", value:content1},
+				       {name:"content2", value:content2},
+				       {name:"content3", value:content3},
+				       {name:"content4", value:content4},
+				       {name:"content5", value:content5}
+				]
+			});
+		
+		return success;
 	}
 	
 	setPageSizeRatio(0.8);
@@ -112,10 +118,8 @@ window.onload = function() {
 	}
 	
 	page.onkeydown = function(e) {
-		sync(function(r) {
-			if(!r)
-				console.log("글자 수 제한을 초과하였습니다.");
-		});
+		if(sync())
+			console.log("글자 수 제한을 초과하였습니다.");
 		
 	    if (e.keyCode === 9) { // tab key
 	        e.preventDefault();  // this will prevent us from tabbing out of the editor
@@ -686,13 +690,10 @@ window.onload = function() {
 	back.onclick = function() {
 		triggerEvent(page, "mousedown");
 		
-		sync(function(r) {
-			if(r)
-				window.parent.postMessage(<%= ((Page)request.getAttribute("page")).getIdx() %>, "*");
-			else
-				console.log("글자 수 제한을 초과하였습니다.");
-		});
-	}
+		if(sync())
+			window.parent.postMessage(<%= ((Page)request.getAttribute("page")).getIdx() %>, "*");
+		else
+			console.log("글자 수 제한을 초과하였습니다.");
 }
 </script>
 <style>

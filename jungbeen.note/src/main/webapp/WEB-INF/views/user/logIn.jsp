@@ -254,7 +254,16 @@ position : absolute;
 </head>
 <body>
 <% 
-	String userId = (String)session.getAttribute("userId"); 
+	String userId = (String)session.getAttribute("userId");
+
+	Cookie[] cookies = request.getCookies();
+	if(cookies != null)
+		for(Cookie cookie:cookies){
+			if(cookie.getName().equals("userId")){
+				session.setAttribute("userId",cookie.getValue());
+			}
+		};
+
 %>
 <div class="cont">
 	<div class="demo">
@@ -262,7 +271,7 @@ position : absolute;
 			<img width="50" height="50" src="/note/img/friend.png">
 		</div>
 		<div class="login">
-			<h2 id="corId">${userId}</h2>
+			<h2 id="corId"><%= session.getAttribute("userId") != null ? session.getAttribute("userId") : "" %></h2>
 	
 			<label for="inp" class="inp id"><input type="text" name="userId" placeholder="&nbsp;" autocomplete="off"><span class="label">아이디</span><span class="border"></span></label>
 			<label for="inp" class="inp pw"><input type="password" name="userPw" placeholder="&nbsp;" autocomplete="off"><span class="label">비밀번호</span><span class="border"></span></label>

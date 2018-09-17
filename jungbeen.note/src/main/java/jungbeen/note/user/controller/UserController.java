@@ -339,6 +339,7 @@ public class UserController {
 	
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response){
+		
 		request.getSession().invalidate();
 		
 		Cookie[] cookies = request.getCookies();

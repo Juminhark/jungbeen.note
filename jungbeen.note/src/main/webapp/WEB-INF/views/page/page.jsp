@@ -254,22 +254,36 @@ window.onload = function() {
 				data:fd,
 				serialize:true,
 				success:function(response) {
+					var isPng = response.split(".")[1] == "png";
+					
 					if(droppedNode != null) {
 						var sel = RangeEx.setRange({
 					    	startNode:droppedNode.firstChild == null ? droppedNode : droppedNode.firstChild,
 					    	endNode:droppedNode.lastChild == null ? droppedNode : droppedNode.lastChild
 					    });
 						
-						RangeEx.insertNode({
-							range:sel.getRangeAt(0),
-							tagName:"img",
-							attribute:[
-								{name:"src", value:"/note/upload/" + response}
-							]
-						});
+						if(isPng)
+							RangeEx.insertNode({
+								range:sel.getRangeAt(0),
+								tagName:"img",
+								attribute:[
+									{name:"src", value:"/note/upload/" + response}
+								]
+							});
+						else
+							RangeEx.insertNode({
+								range:sel.getRangeAt(0),
+								tagName:"img",
+								attribute:[
+									{name:"src", value:"/note/upload/" + response},
+									{name:"style", value:"box-shadow:0px 5px 10px 1px rgba(0, 0, 0, 0.5)"}
+								]
+							});
 					} else {
 						var img = document.createElement("img");
 						img.setAttribute("src", "/note/upload/" + response);
+						if(!isPng)
+							img.setAttribute("style", "box-shadow:0px 5px 10px 1px rgba(0, 0, 0, 0.5)");
 						
 						page.appendChild(img);
 					}
@@ -705,8 +719,9 @@ window.onload = function() {
 ::selection {
 	background-color:#D8D8D8;
 }
-img {
+.page img {
 	width:100%;
+	border-radius:1%;
 }
 :root {
 	--page-size-ratio:1;

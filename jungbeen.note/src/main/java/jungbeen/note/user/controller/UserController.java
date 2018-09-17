@@ -63,7 +63,17 @@ public class UserController {
 	@ResponseBody
 	public boolean checkPw(HttpServletRequest request, HttpServletResponse response){
 		boolean result = false;
-		String userPw = request.getParameter("userPw");		
+		String userPw = request.getParameter("userPw");	
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null)
+			for(Cookie cookie : cookies)
+				if(cookie.getName().equals("userId")) {
+					User corUser = userService.findUser(cookie.getValue());
+					request.getSession().setAttribute("corUser", corUser);
+					System.out.println(cookie.getValue());
+				}
+		
 		if(userPw != null && !userPw.equals("")){	
 			User corUser = (User)request.getSession().getAttribute("corUser");
 			if(userPw.equals(corUser.getUserPw())){

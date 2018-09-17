@@ -119,8 +119,7 @@ window.onload = function() {
 	
 	page.onkeydown = function(e) {
 		if(sync())
-			console.log("글자 수 제한을 초과하였습니다.");
-		
+			console.log("글자 수 제한을 초과하였습니다.");		
 	    if (e.keyCode === 9) { // tab key
 	        e.preventDefault();  // this will prevent us from tabbing out of the editor
 
@@ -137,20 +136,10 @@ window.onload = function() {
 		if(sel.isCollapsed) {
 			if(cursor.getAttribute("style") != undefined &&
 					findAncestor(cursor, page)) {
-				var firstChild = cursor.firstChild;
-				while(firstChild.wholeText != cursor.innerText)
-					firstChild = firstChild.nextSibling;
-				
-				var lastChild = cursor.lastChild;
-				while(lastChild.wholeText != cursor.innerText)
-					lastChild = lastChild.previousSibling;
-				
-				console.log(firstChild);
-				console.log(lastChild);
 				
 			    var sel = RangeEx.setRange({
-			    	startNode:firstChild == null ? cursor : firstChild, 
-			    	endNode:lastChild == null ? cursor : lastChild
+			    	startNode:cursor.firstChild == null ? cursor : cursor.firstChild, 
+			    	endNode:cursor.lastChild == null ? cursor : cursor.lastChild
 			    });
 			    
 				RangeEx.surroundContents({
@@ -174,6 +163,8 @@ window.onload = function() {
 						root:page,
 						attribute:[{name:"style"}]
 					});
+			    	
+			    	reset(160, 40);
 				}
 				
 				popup(e.clientX, e.clientY, 200, 40);
@@ -184,13 +175,14 @@ window.onload = function() {
 	page.onmousedown = function(e) {
 		reset();
 		
-		if(e.which == 1) {
+		if(e.which == 1) {						
 			//밑줄표시를 위해 data-select 속성을 가진 SPAN객체가 삽입되면,
 			//그 객체의 양 옆에 아무런 글자도 없음을 나타내는 유니코드가 생기는 것 같다.
 			//그리고 surroundContents 함수는 그 유니코드도 SPAN으로 감싼다.
 			//이런 과정이 반복되면 SPAN객체가 수없이 많아져 프로그램이 둔해진다.
 			//따라서 모든 유니코드를 제거하는 코드를 아래와 같이 추가하였다.
-			page.innerHTML = page.innerHTML.replace(/&[a-z.]*;/g, "");
+			if(page.innerHTML != page.innerHTML.replace(/&[a-z.]*;/g, ""))
+				page.innerHTML = page.innerHTML.replace(/&[a-z.]*;/g, " ");
 			
 			while(document.querySelector("[data-select='selected']")) {
 				var target = document.querySelector("[data-select='selected']");
@@ -295,7 +287,7 @@ window.onload = function() {
 			});
 		}
 	}
-	
+
 	//text-menu
 	function hide(el) {
 		el.style.display = "none";
@@ -376,7 +368,11 @@ window.onload = function() {
 					tagName:"span",
 					attribute:[{name:"style", value:"font-size:" + fontSize + "px"}]
 				});	
+			    
+			    reset(160, 40);
 			}, 50);
+		} else {
+			
 		}
 	}
 	
@@ -393,6 +389,8 @@ window.onload = function() {
 			tagName:"span",
 			attribute:[{name:"style", value:"font-weight:bolder"}]
 		});	
+	    
+	    reset(160, 40);
 	}
 	
 	for(var i = 0; i < colors.children.length; i++) {
@@ -414,6 +412,8 @@ window.onload = function() {
 					tagName:"span",
 					attribute:[{name:"style", value:"color:"+rgba}]
 				});
+			    
+			    reset(160, 40);
 			}
 		} else {
 			col.children[0].onkeydown = function(e) {
@@ -450,6 +450,8 @@ window.onload = function() {
 									attribute:[{name:"style", value:"color:"+rgba}]
 								});
 							}, 50);
+							
+							reset(160, 40);
 						}
 					}
 				}
@@ -471,6 +473,8 @@ window.onload = function() {
 			tagName:"span",
 			attribute:[{name:"style", value:"text-decoration:overline"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//line-through
@@ -487,6 +491,8 @@ window.onload = function() {
 			tagName:"span",
 			attribute:[{name:"style", value:"text-decoration:line-through"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//underline
@@ -503,6 +509,8 @@ window.onload = function() {
 			tagName:"span",
 			attribute:[{name:"style", value:"text-decoration:underline"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	for(var i = 0; i < markColors.children.length; i++) {
@@ -524,6 +532,8 @@ window.onload = function() {
 					tagName:"span",
 					attribute:[{name:"style", value:"background-color:"+rgba}]
 				});
+			    
+			    reset(160, 40);
 			}
 		} else {
 			markColor.children[0].onkeydown = function(e) {
@@ -560,6 +570,8 @@ window.onload = function() {
 									attribute:[{name:"style", value:"background-color:"+rgba}]
 								});
 							}, 50);
+							
+							reset(160, 40);
 						}
 					}
 				}
@@ -581,6 +593,8 @@ window.onload = function() {
 			tagName:"div",
 			attribute:[{name:"style", value:"text-align:left"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//center
@@ -597,6 +611,8 @@ window.onload = function() {
 			tagName:"div",
 			attribute:[{name:"style", value:"text-align:center"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//right
@@ -613,6 +629,8 @@ window.onload = function() {
 			tagName:"div",
 			attribute:[{name:"style", value:"text-align:right"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//justify
@@ -629,6 +647,8 @@ window.onload = function() {
 			tagName:"div",
 			attribute:[{name:"style", value:"text-align:justify"}]
 		});
+	    
+	    reset(160, 40);
 	}
 	
 	//erase는 page.oncontextmenu에서 handler를 등록했다.
@@ -694,6 +714,7 @@ window.onload = function() {
 			window.parent.postMessage(<%= ((Page)request.getAttribute("page")).getIdx() %>, "*");
 		else
 			console.log("글자 수 제한을 초과하였습니다.");
+	}
 }
 </script>
 <style>

@@ -96,6 +96,7 @@ $(function(){
 				url:"passCheck",
 				data:{
 					userPw:$inputPw.val()
+					
 				},
 				success:function(result){
 					if(result){

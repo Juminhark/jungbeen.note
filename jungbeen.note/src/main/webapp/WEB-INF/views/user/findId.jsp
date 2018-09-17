@@ -179,7 +179,6 @@ $(function(){
 	opacity: 0;
 	transition-duration:1s;
 }
-
 #back{
 	position : absolute;
 	left : 5rem;

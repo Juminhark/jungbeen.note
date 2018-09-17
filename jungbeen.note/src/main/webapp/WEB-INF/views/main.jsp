@@ -903,6 +903,7 @@ window.onload = function() {
 		$(".demo").css('left','calc(50% - 20rem)');
 		$(".demo").css('width','40rem');
 		$(".demo").css('height','30rem');
+		$(".tomain").css('display','block');
 		// 내용변경
 		$('#icon').css('display','none');
 		$(".myUser").css('opacity','1');
@@ -1257,6 +1258,17 @@ window.onload = function() {
 	// 로그아웃
  	$("#logout").bind("click", function(){
 		setTimeout(function() {window.location.href="http://localhost/note/logout";}, 700);
+	});
+	
+	$(".tomain").bind("click",function(){
+		// 창 조절
+		$(".demo").css('top','2%');
+		$(".demo").css('left','93%');
+		$(".demo").css('width','5rem');
+		$(".demo").css('height','5rem');
+		
+		setTimeout(function() {$('#icon').css('display','block');}, 700);
+		setTimeout(function() {$(".tomain").css('display','none');}, 700);
 	});
 }
 </script>
@@ -1674,7 +1686,7 @@ window.onload = function() {
 	  	height: 5rem;
 	  	overflow: hidden;
 		transition-duration:1s;
-		z-index:10;
+		z-index:2;
 	}
 	.login {
 	 	position: relative;
@@ -1853,6 +1865,16 @@ window.onload = function() {
 		transition-duration:1s;
 		display: none;
 	}
+	.tomain {
+		z-index:1;
+		position:fixed;
+		left:0%;
+		top:0%;
+		width:100%;
+		height:100%;
+		cursor:pointer;
+		display: none;
+	}
 	
 	
 </style>
@@ -1861,6 +1883,7 @@ window.onload = function() {
 	<% User corUser = (User)session.getAttribute("corUser"); %>
 	
 	<!-- 사용자정보 관리 목록 -->
+	<div class="tomain"></div>
 	<div class="demo">
 		<div class="login">
 			<!-- icon -->

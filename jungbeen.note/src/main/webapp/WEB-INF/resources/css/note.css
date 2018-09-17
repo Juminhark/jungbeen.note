@@ -35,6 +35,8 @@
 			calc(var(--note-standard-size) * 0.2)
 			calc(var(--note-standard-size) * 0.1) 
 			calc(var(--note-standard-size) * 0.2);
+			
+		z-index:5;
 		
 		perspective:calc(var(--note-standard-size) * 10);
 		transition-duration:var(--transition-duration);

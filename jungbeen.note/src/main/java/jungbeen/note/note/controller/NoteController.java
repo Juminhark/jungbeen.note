@@ -30,7 +30,10 @@ public class NoteController {
 	@RequestMapping("/main")
 	public String main(HttpServletRequest request) {		
 		User user = (User)request.getSession().getAttribute("corUser");
-		String userId = user.getUserId();
+		String userId = null;
+		
+		if(user != null)
+			userId = user.getUserId();
 		
 		if(userId == null)
 			return "forward:/";
@@ -53,11 +56,11 @@ public class NoteController {
 	public boolean addNote(HttpServletRequest request) {
 		int noteId = noteService.NEXTVAL();
 		int noteIdx = Integer.parseInt(request.getParameter("idx").trim());
-		
+		String noteColor = request.getParameter("color");
 		Note note = new Note();
 		note.setId(noteId);
 		note.setName("");
-		note.setColor("#000000");
+		note.setColor(noteColor);
 		note.setShareCnt(0);
 		noteService.addNote(note);
 		
@@ -76,6 +79,9 @@ public class NoteController {
 		}
 		
 		UserNote userNote = new UserNote();
+		
+		System.out.println(request.getParameter("userId"));
+		System.out.println(noteIdx);
 		
 		userNote.setUserId(request.getParameter("userId"));
 		userNote.setNoteId(noteId);

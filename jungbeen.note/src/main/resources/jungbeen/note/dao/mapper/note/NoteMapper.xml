@@ -25,7 +25,7 @@
 	
 	<insert id="insertNote" parameterType="note">
 		INSERT INTO notes
-		VALUES (#{id}, NVL(#{name}, 'new Note'), #{color}, 0)
+		VALUES (#{id}, NVL(#{name}, ' '), #{color}, 0)
 	</insert>
 	
 	<update id="updateNote" parameterType="note">

@@ -764,7 +764,7 @@ window.onload = function() {
 	top:240px;
 	
 	border-radius:5px;
-	background-color:#D8D8D8;
+	background-color:#f2f2f2;
 	box-shadow:0px 5px 10px 1px rgba(0, 0, 0, 0.5);
 	
 	transition-duration:0.25s;

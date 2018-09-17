@@ -331,7 +331,7 @@ public class UserController {
 		
 		userService.delUser(delUser);
 		
-		return "user/logIn";
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////////////////////////////

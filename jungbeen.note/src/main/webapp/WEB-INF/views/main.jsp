@@ -894,74 +894,182 @@ window.onload = function() {
 		undo.style.display = "block";
 		ignore.style.display = "block";
 	}
+	///////////////////////////////////계정 정보 수정///////////////////////////////////
 	
 	// 계정 -> 계정수정
-	$(".movetoModal").bind("click", function(){
-		$('#myModal').modal('hide');
+ 	$("#icon").bind("click", function(){
+		// 창 조절
+		$(".demo").css('top','calc(50% - 26.5rem)');
+		$(".demo").css('left','calc(50% - 20rem)');
+		$(".demo").css('width','40rem');
+		$(".demo").css('height','30rem');
+		// 내용변경
+		$('#icon').css('display','none');
+		$(".myUser").css('opacity','1');
+		$("#deleteuser").css('opacity','1');
+		$("#logout").css('opacity','1');
 	});
+	
+ // 계정정보 -> 이름수정
+ 	$("#nameUser").bind("click",function(){
+ 		$(".myUser").css('opacity','0');
+ 		$("#deleteuser").css('opacity','0');
+ 		$("#logout").css('opacity','0');	
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','none');}, 700);
+ 		
+ 		setTimeout(function() {$("#nameColor").css('display','block');}, 700);
+ 		setTimeout(function() {$("#nameError").css('display','block');}, 700);
+ 		setTimeout(function() {$("#back").css('display','block');}, 700);
+ 		setTimeout(function() {$("#next").css('display','block');}, 700);
+ 		
+ 		setTimeout(function() {$("#nameColor").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#nameError").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#back").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#next").css('opacity','1');}, 800);
+ 	});
+
+ 	// 계정정보 -> 비밀번호수정
+ 	$("#pwUser").bind("click",function(){
+ 		$(".myUser").css('opacity','0');
+ 		$("#deleteuser").css('opacity','0');
+ 		$("#logout").css('opacity','0');	
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','none');}, 700);
+ 		
+ 		setTimeout(function() {$("#pwColor").css('display','block');}, 700);
+ 		setTimeout(function() {$("#pwError").css('display','block');}, 700);
+ 		setTimeout(function() {$("#pwCheck").css('display','block');}, 700);
+ 		setTimeout(function() {$("#pwckError").css('display','block');}, 700);
+ 		setTimeout(function() {$("#back").css('display','block');}, 700);
+ 		setTimeout(function() {$("#next").css('display','block');}, 700);
+ 		
+ 		setTimeout(function() {$("#pwColor").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#pwError").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#pwCheck").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#pwckError").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#back").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#next").css('opacity','1');}, 800);
+ 	});
+
+ 	// 계정정보 -> 이메일수정
+ 	$("#emailUser").bind("click",function(){
+ 		$(".myUser").css('opacity','0');
+ 		$("#deleteuser").css('opacity','0');
+ 		$("#logout").css('opacity','0');
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','none');}, 700);
+ 		
+ 		setTimeout(function() {$("#emailColor").css('display','block');}, 700);
+ 		setTimeout(function() {$("#emailError").css('display','block');}, 700);
+ 		setTimeout(function() {$("#back").css('display','block');}, 700);
+ 		setTimeout(function() {$("#next").css('display','block');}, 700);
+ 		
+ 		setTimeout(function() {$("#emailColor").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#emailError").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#back").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#next").css('opacity','1');}, 800);
+ 	});
+ 	
+ 	// 계정정보 -> 계정삭제
+ 	$("#deleteuser").bind("click", function(){
+ 		$(".myUser").css('opacity','0');
+ 		$("#deleteuser").css('opacity','0');
+ 		$("#logout").css('opacity','0');
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','none');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','none');}, 700);
+
+ 		setTimeout(function() {$("#delMsg1").css('display','block');}, 700);
+ 		setTimeout(function() {$("#delMsg2").css('display','block');}, 700);
+ 		setTimeout(function() {$("#delMsg3").css('display','block');}, 700);
+ 		setTimeout(function() {$("#back").css('display','block');}, 700);
+ 		setTimeout(function() {$("#confirming").css('display','block');}, 700);
+ 		
+ 		setTimeout(function() {$("#delMsg1").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#delMsg2").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#delMsg3").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#back").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#confirming").css('opacity','1');}, 800);
+	});
+
+ 	// 정보수정 -> 계정정보
+ 	$("#back").bind("click",function(){
+ 		// 오류상황 해제
+ 		$('#nameColor input + span').css('color','#0077FF'); 
+		$('#nameColor .border').css('background','#0077FF');  
+		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#nameError").text("");
 		
-	// 각 변경에서 계정수정으로 이동
-	$(".closeModal").bind("click", function(){
-		$('#nameModal').modal('hide');
-		$('#pwModal').modal('hide');
-		$('#emailModal').modal('hide');
-		$('#delModal').modal('hide');
-	});
+		$('#pwColor input + span').css('color','#0077FF'); 
+		$('#pwColor .border').css('background','#0077FF');
+		$('#pwColor input').css('border-bottom','2px solid #0077FF');
+		$("#pwError").text("");	
+		$('#pwCheck input + span').css('color','#0077FF'); 
+		$('#pwCheck .border').css('background','#0077FF');
+		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+		$("#pwckError").text("");
+ 		
+ 		$('#emailColor input + span').css('color','#0077FF'); 
+		$('#emailColor .border').css('background','#0077FF');  
+		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#emailError").text("");
+		
+		// 창 변화
+ 		$("#nameColor").css('opacity','0');	
+ 		$("#nameError").css('opacity','0');
+ 		$("#pwColor").css('opacity','0');
+ 		$("#pwError").css('opacity','0');
+ 		$("#pwCheck").css('opacity','0');
+ 		$("#pwckError").css('opacity','0');
+ 		$("#emailCheck").css('opacity','0');
+ 		$("#emailError").css('opacity','0');
+ 		$("#delMsg1").css('opacity','0');
+ 		$("#delMsg2").css('opacity','0');
+ 		$("#delMsg3").css('opacity','0');
+ 		$("#back").css('opacity','0');
+ 		$("#next").css('opacity','0');
+ 		$("#confirming").css('opacity','0');
+ 		
+ 		setTimeout(function() {$("#nameColor").css('display','none');}, 700);
+ 		setTimeout(function() {$("#nameError").css('display','none');}, 700);
+ 		setTimeout(function() {$("#pwColor").css('display','none');}, 700);
+ 		setTimeout(function() {$("#pwError").css('display','none');}, 700);
+ 		setTimeout(function() {$("#pwCheck").css('display','none');}, 700);
+ 		setTimeout(function() {$("#pwckError").css('display','none');}, 700);
+ 		setTimeout(function() {$("#emailColor").css('display','none');}, 700);
+ 		setTimeout(function() {$("#emailError").css('display','none');}, 700);
+ 		setTimeout(function() {$("#delMsg1").css('display','none');}, 700);
+ 		setTimeout(function() {$("#delMsg2").css('display','none');}, 700);
+ 		setTimeout(function() {$("#delMsg3").css('display','none');}, 700);
+ 		setTimeout(function() {$("#back").css('display','none');}, 700);
+ 		setTimeout(function() {$("#next").css('display','none');}, 700);
+ 		setTimeout(function() {$("#confirming").css('display','none');}, 700);
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','block');}, 700);
+
+ 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);
+ 	});
 		
 	var $inputName = $("input[name='userName']"); //이름 입력창
 	var $inputPw = $("input[name='userPw']");     //비밀번호 입력창
 	var $checkPw = $("input[name='checkPw']");    //비밀번호 확인 입력창
-	var $inputEmail = $("input[name='userEmail']");    //이메일 입력창
+	var $inputEmail = $("input[name='userEmail']");    //이메일 입력창 */
 	
-	// 이름 입력창에서 enter 누르면 확인 버튼 클릭.
-	$inputName.bind("keydown", function(event){
-		if(event.which == 13){
-			$('#nameChange').click();
-		}
-	});
-	
-	// 취소누르면 오류상황 해제
-	$('#closeName').bind("click",function(){
-		$('#nameColor input + span').css('color','#0077FF'); 
-		$('#nameColor .border').css('background','#0077FF');  
-		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#nameError").text("");
-		$inputName.val("");
-	});
-	
-	//이름변경
-	$("#nameChange").bind("click", function(){
-		if($inputName.val() != ""){
-			$.ajax({
-				method: "post",
-				url: "nameChange",
-				data:{
-					userName:$inputName.val()
-				},
-				success:function(corUser){
-					$('#myModal').modal();
-					$('#myModal3').modal('hide');
-					$('.changeName').text(corUser.userName);
-					 
-					$('#nameColor input + span').css('color','#0077FF'); 
-					$('#nameColor .border').css('background','#0077FF');  
-					$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
-					$("#nameError").text("");
-					$inputName.val("");
-				},
-				error:function(){
-					alert("서버 오류");
-				}
-			});
-		}else{
-			$('#nameColor input + span').css('color','#a30404'); 
-			$('#nameColor .border').css('background','#a30404');  
-			$('#nameColor input').css('border-bottom','2px solid #a30404'); 
-			$("#nameError").text("이름이입력되지않았습니다");
-		}
-	});
-	
-	// 비밀번호 입력창에서 enter 누르면 비밀번호 확인 입력창으로 이동
+	// 입력창에서 enter 누르면 확인 버튼 클릭.
+	$inputName.bind("keydown", function(event){if(event.which == 13){$('#next').click();}});
+	// 입력창에서 enter 누르면 비번확인으로 이동.
 	$inputPw.bind("keydown", function(event){
 		if(event.which == 13){
 			if($inputPw.val() != ""){
@@ -975,34 +1083,95 @@ window.onload = function() {
 				$('#pwColor .border').css('background','#a30404');  
 				$('#pwColor input').css('border-bottom','2px solid #a30404'); 
 				$("#pwError").text("비밀번호가 입력되지않았습니다");	
-			}
+			}	
+		}
+	}); 
+	// 입력창에서 enter 누르면 확인 버튼 클릭.
+ 	$checkPw.bind("keydown", function(event){
+ 		if(event.which == 13){	
+ 			if($checkPw.val() != ""){
+ 				$('#pwCheck input + span').css('color','#0077FF'); 
+ 				$('#pwCheck .border').css('background','#0077FF');
+ 				$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+ 				$("#pwckError").text("");
+ 				$('#next').click();
+ 			}else{
+ 				$('#pwCheck input + span').css('color','#a30404');  
+ 				$('#pwCheck .border').css('background','#a30404');  
+ 				$('#pwCheck input').css('border-bottom','2px solid #a30404'); 
+ 				$("#pwckError").text("비밀번호 확인이 입력되지않았습니다");
+ 			}
 		}
 	});
-	
-	// 비밀번호 확인 입력창에서 enter누르면 확인 버튼이 클릭. 
-	$checkPw.bind("keydown", function(event){
+	// 입력창에서 enter 누르면 확인 버튼 클릭.
+	$inputEmail.bind("keydown", function(event){
 		if(event.which == 13){
-			if($checkPw.val() != ""){
-				$('#pwCheck input + span').css('color','#0077FF'); 
-				$('#pwCheck .border').css('background','#0077FF');
-				$('#pwCheck input').css('border-bottom','2px solid #0077FF');
-				$("#pwckError").text("");
-				$('#pwChange').click();
+			var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+			if($inputEmail.val() == ""){
+				$('#emailColor input + span').css('color','#a30404');  
+				$('#emailColor .border').css('background','#a30404'); 
+				$('#emailColor input').css('border-bottom','2px solid #a30404'); 
+				$("#emailError").text("이메일이 입력되지않았습니다");
+			}else if(exptext.test($inputEmail.val())==false){
+				$('#emailColor input + span').css('color','#a30404');  
+				$('#emailColor .border').css('background','#a30404'); 
+				$('#emailColor input').css('border-bottom','2px solid #a30404'); 
+				$("#emailError").text("이메일형식이 아닙니다.");
 			}else{
-				$('#pwCheck input + span').css('color','#a30404');  
-				$('#pwCheck .border').css('background','#a30404');  
-				$('#pwCheck input').css('border-bottom','2px solid #a30404'); 
-				$("#pwckError").text("비밀번호 확인이 입력되지않았습니다");
+				$('#next').click();
 			}
-			
 		}
 	});
 	
-	//비밀번호변경
-	$("#pwChange").bind("click", function(){
-		var input = $("input[name='userPw']").val();
-		var check = $("input[name='checkPw']").val();
-		if(input == check){
+	$("#next").bind("click", function(){
+		//이름변경
+		if($inputName.val() != ""){
+			$.ajax({
+				method: "post",
+				url: "nameChange",
+				data:{
+					userName:$inputName.val()
+				},
+				success:function(corUser){
+					$('#nameColor input + span').css('color','#0077FF'); 
+					$('#nameColor .border').css('background','#0077FF');  
+					$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
+					$("#nameError").text("");
+					
+					// 계정 정보에 이름 바뀐 이름으로 변화, button id=nameUser 안에 있는 span 내용 지우고 바뀐이름으로
+					$("#nameUser span").text(corUser.userName);
+					
+					// 계정 정보 로 이동
+			 		$("#nameColor").css('opacity','0');
+			 		$("#nameError").css('opacity','0');
+			 		$("#back").css('opacity','0');
+			 		$("#next").css('opacity','0');
+			 		setTimeout(function() {$("#nameColor").css('display','none');}, 700);
+			 		setTimeout(function() {$("#nameError").css('display','none');}, 700);
+			 		setTimeout(function() {$("#back").css('display','none');}, 700);
+			 		setTimeout(function() {$("#next").css('display','none');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#logout").css('display','block');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);	
+				},
+				error:function(){
+					alert("서버 오류");
+				}
+			});
+		}else{
+			$('#nameColor input + span').css('color','#a30404'); 
+			$('#nameColor .border').css('background','#a30404');  
+			$('#nameColor input').css('border-bottom','2px solid #a30404'); 
+			$("#nameError").text("이름이입력되지않았습니다");
+		}
+		
+		// 비번변경
+		if(($inputPw.val() != "")&&($checkPw.val() != "")&&($inputPw.val() == $checkPw.val())){
 			$.ajax({
 				method: "post",
 				url: "pwChange",
@@ -1010,75 +1179,39 @@ window.onload = function() {
 					userPw:$inputPw.val()
 				},
 				success:function(corUser){
-					$('#myModal').modal();
-					$('#myModal5').modal('hide');
+					// 계정 정보에 이름 바뀐 이름으로 변화, button id=nameUser 안에 있는 span 내용 지우고 바뀐이름으로
+					$("#pwUser span").text(corUser.userPw);
 					
-					$('#pwColor input + span').css('color','#0077FF'); 
-					$('#pwColor .border').css('background','#0077FF');
-					$('#pwColor input').css('border-bottom','2px solid #0077FF');
-					
-					$('#pwCheck input + span').css('color','#0077FF'); 
-					$('#pwCheck .border').css('background','#0077FF');
-					$('#pwCheck input').css('border-bottom','2px solid #0077FF');
-					$("#pwckError").text("");
-					$inputPw.val("");
-					$checkPw.val("");
+					// 계정 정보 로 이동
+			 		$("#pwColor").css('opacity','0');
+			 		$("#pwError").css('opacity','0');
+			 		$("#pwCheck").css('opacity','0');
+			 		$("#pwckError").css('opacity','0');
+			 		$("#back").css('opacity','0');
+			 		$("#next").css('opacity','0');
+			 		setTimeout(function() {$("#pwColor").css('display','none');}, 700);
+			 		setTimeout(function() {$("#pwError").css('display','none');}, 700);
+			 		setTimeout(function() {$("#pwCheck").css('display','none');}, 700);
+			 		setTimeout(function() {$("#pwckError").css('display','none');}, 700);
+			 		setTimeout(function() {$("#back").css('display','none');}, 700);
+			 		setTimeout(function() {$("#next").css('display','none');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#logout").css('display','block');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);
 				},
 				error:function(){
 					alert("서버 오류");
 				}
 			});
-		}else{		
-			$('#pwCheck input + span').css('color','#a30404'); 
-			$('#pwCheck .border').css('background','#a30404');
-			$('#pwCheck input').css('border-bottom','2px solid #a30404');		
-			$("#pwckError").text("비밀번호가 틀렸습니다");	
-		}
-	});
-	
-	$('#closePw').bind("click",function(){
-		$('#pwColor input + span').css('color','#0077FF'); 
-		$('#pwColor .border').css('background','#0077FF');
-		$('#pwColor input').css('border-bottom','2px solid #0077FF');
-		$("#pwError").text("");	
+		}	
 		
-		$('#pwCheck input + span').css('color','#0077FF'); 
-		$('#pwCheck .border').css('background','#0077FF');
-		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
-		$("#pwckError").text("");
-		$inputPw.val("");
-		$checkPw.val("");
-	});
-	
-	$inputEmail.bind("keydown", function(event){
-		if(event.which == 13){
-			$('#emailChange').click();
-		}
-	});
-	
-	// 취소누르면 오류상황 해제
-	$('#closeEmail').bind("click",function(){
-		$('#emailColor input + span').css('color','#0077FF'); 
-		$('#emailColor .border').css('background','#0077FF');  
-		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#emailError").text("");
-		$inputEmail.val("");
-	});
-	
-	//이메일변경
-	$("#emailChange").bind("click", function(){
-		var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-		if($inputEmail.val() == ""){
-			$('#emailColor input + span').css('color','#a30404');  
-			$('#emailColor .border').css('background','#a30404'); 
-			$('#emailColor input').css('border-bottom','2px solid #a30404'); 
-			$("#emailError").text("이메일이 입력되지않았습니다");
-		}else if(exptext.test($inputEmail.val())==false){
-			$('#emailColor input + span').css('color','#a30404');  
-			$('#emailColor .border').css('background','#a30404'); 
-			$('#emailColor input').css('border-bottom','2px solid #a30404'); 
-			$("#emailError").text("이메일형식이 아닙니다.");
-		}else{
+		//이름변경
+		if($inputEmail.val() != ""){
 			$.ajax({
 				method: "post",
 				url: "emailChange",
@@ -1086,22 +1219,44 @@ window.onload = function() {
 					userEmail:$inputEmail.val()
 				},
 				success:function(corUser){
-					$('#myModal').modal();
-					$('#myModal6').modal('hide');
-					$('.changeEmail').text(corUser.userEmail);
+					// 계정 정보에 이름 바뀐 이름으로 변화, button id=nameUser 안에 있는 span 내용 지우고 바뀐이름으로
+					$("#emailUser span").text(corUser.userEmail);
 					
-					$('#emailColor input + span').css('color','#0077FF'); 
-					$('#emailColor .border').css('background','#0077FF');  
-					$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
-					$("#emailError").text("");
-					$inputEmail.val("");
-					
+					// 계정 정보 로 이동
+			 		$("#emailColor").css('opacity','0');
+			 		$("#emailError").css('opacity','0');
+			 		$("#back").css('opacity','0');
+			 		$("#next").css('opacity','0');
+			 		
+			 		setTimeout(function() {$("#emailColor").css('display','none');}, 700);
+			 		setTimeout(function() {$("#emailError").css('display','none');}, 700);
+			 		setTimeout(function() {$("#back").css('display','none');}, 700);
+			 		setTimeout(function() {$("#next").css('display','none');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
+			 		setTimeout(function() {$("#logout").css('display','block');}, 700);
+			 		
+			 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
+			 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);		
 				},
 				error:function(){
 					alert("서버 오류");
 				}
 			});
 		}
+	});
+	// 계정삭제
+ 	$("#confirming").bind("click", function(){
+ 		if($("#delMsg3 input:checked").size()){
+ 			setTimeout(function() {window.location.href="http://localhost/note/delUser";}, 700);
+ 		}
+	});
+		
+	// 로그아웃
+ 	$("#logout").bind("click", function(){
+		setTimeout(function() {window.location.href="http://localhost/note/logout";}, 700);
 	});
 }
 </script>
@@ -1508,9 +1663,9 @@ window.onload = function() {
 	.inp input:focus + span + .border {
 	  transform: scaleX(1);
 	}
-/* input창 변화 끝 */
+	/* input창 변화 끝 */
 
-
+	/* 계정 정보 수정 */
 	.demo {
 	  	position: absolute;
 	  	top: 2%;
@@ -1519,11 +1674,184 @@ window.onload = function() {
 	  	height: 5rem;
 	  	overflow: hidden;
 		transition-duration:1s;
+		z-index:10;
 	}
 	.login {
 	 	position: relative;
-	 	 height: 100%;
-	 	 background: linear-gradient(to bottom, rgba(152, 152, 155, 0.18) 0%, rgba(0, 0, 0, 0.4) 100%);
+	 	height: 100%;
+	 	background: linear-gradient(to bottom, rgba(152, 152, 155, 0.18) 0%, rgba(0, 0, 0, 0.4) 100%);
+	}
+	#icon{
+		display: block;
+	}
+	.myUser{
+		opacity: 0;
+		transition-duration:1s;
+		magin: 0;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		width: 40rem;
+	  	height: 5.5rem;
+		background: transparent;
+		border-bottom: 1px solid black; 
+		text-align:left;
+		padding: 0 0 0 3rem;
+		z-index:10;
+	}
+	
+	#deleteuser{
+		position : absolute;
+		left : 5rem;
+		top : 23.5rem;
+		border :none;
+		background-color : transparent;
+		opacity: 0;
+		transition-duration:1s;
+		display: block;
+		z-index:11;
+	}
+	#logout{
+		position : absolute;
+		left : 31rem;
+		top : 23.5rem;
+		border :none;
+		background-color : transparent;
+		opacity: 0;
+		transition-duration:1s;
+		display: block;
+		z-index:11;
+	}
+	.myUser span{
+		position : absolute;
+		left: 14rem;
+	}
+	/* 계정 정보 수정 */
+
+	/* 계정수정 공통 */
+	.inp{
+		positions : absolute;
+		left : 5rem;
+		top : 5rem;
+		opacity: 0;
+	}
+	#back{
+		position : absolute;
+		left : 5rem;
+		top : 23.5rem;
+		border :none;
+		background-color : transparent;
+		opacity: 0;
+		transition-duration:1s;
+		display: none;
+	}
+	#next{
+		position : absolute;
+		left : 31rem;
+		top : 23.5rem;
+		border :none;
+		opacity: 0;
+		background-color : transparent;
+		transition-duration:1s;
+		display: none;
+	}
+	#confirming{
+		position : absolute;
+		left : 31rem;
+		top : 23.5rem;
+		border :none;
+		opacity: 0;
+		background-color : transparent;
+		transition-duration:1s;
+		display: none;
+	}
+	
+	/* 이름변경 */
+	#nameColor{
+		position : absolute;
+		left : 5rem;
+		top : 10rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#nameError{
+		opacity: 0;
+		position : absolute;
+		left : 5rem;
+		top : 16rem;
+		display: none;
+	}
+
+	/* 비밀번호변경 */
+	#pwColor{
+	position : absolute;
+		left : 5rem;
+		top : 5rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#pwError{
+		opacity: 0;
+		position : absolute;
+		left : 5rem;
+		top : 10rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#pwCheck{
+		position : absolute;
+		left : 5rem;
+		top : 13rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#pwckError{
+		position : absolute;
+		left : 5rem;
+		top : 18rem;
+		transition-duration:1s;
+		opacity: 0;
+		display: none;
+	}
+	
+	/* 이메일 변경 */
+	#emailColor{
+		position : absolute;
+		left : 5rem;
+		top : 10rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#emailError{
+		opacity: 0;
+		position : absolute;
+		left : 5rem;
+		top : 16rem;
+		display: none;
+	}
+	
+	
+	/* 계정 삭제*/
+	#delMsg1{
+	position : absolute;
+		left : 5rem;
+		top : 7rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#delMsg2{
+	position : absolute;
+		left : 5rem;
+		top : 11rem;
+		transition-duration:1s;
+		display: none;
+	}
+	#delMsg3{
+	position : absolute;
+		left : 5rem;
+		top : 17rem;
+		transition-duration:1s;
+		display: none;
 	}
 	
 	
@@ -1533,11 +1861,44 @@ window.onload = function() {
 	<% User corUser = (User)session.getAttribute("corUser"); %>
 	
 	<!-- 사용자정보 관리 목록 -->
-	<div class="demo" data-toggle="modal" href="#myModal">
+	<div class="demo">
 		<div class="login">
-			<img width="50" height="50" src="/note/img/friend.png">
+			<!-- icon -->
+			<img width="50" height="50" src="/note/img/friend.png" id="icon">
+			
+			<!-- 계정 정보 --> 
+			<button class="myUser">아이디<span>${corUser.userId}</span></button>
+			<button class="myUser" id="nameUser">이름<span>${corUser.userName}</span></button>
+			<button class="myUser" id="pwUser">비밀번호<span>변경하려면 클릭</span></button>
+			<button class="myUser" id="emailUser">이메일<span>${corUser.userEmail}</span></button>
+			
+			<button id="deleteuser"><img src="img/deleteuser.png" style="width: 30px;"></button>
+			<button id="logout"><img src="/note/img/logout.png" style="width: 26px;"></button>
+		
+			<!-- 이름 변경 -->
+			<label for="inp" class="inp" id="nameColor"><input type="text" name="userName" placeholder="&nbsp;" autocomplete="off"><span class="label">이름</span><span class="border"></></label>
+			<p id="nameError"></p>
+			
+			<button type="button" id="back"><img src="img/back.png"></button>
+			<button type="button" id="next"><img src="img/next.png" style="width: 30px;"></button>
+		
+			<!-- 비밀번호 변경 -->
+			<label for="inp" class="inp" id="pwColor"><input type="password" name="userPw" placeholder="&nbsp;" autocomplete="off"><span class="label">비밀번호</span><span class="border"></span></label>
+			<p id="pwError"></p>
+			<label for="inp" class="inp" id="pwCheck"><input type="password" name="checkPw" placeholder="&nbsp;" autocomplete="off"><span class="label">비밀번호확인</span><span class="border"></span></label>
+			<p id="pwckError"></p>
+
+			<!--  이메일 변경 -->
+			<label for="inp" class="inp" id="emailColor"><input type="text" name="userEmail" placeholder="&nbsp;" autocomplete="off"><span class="label">이메일</span><span class="border"></span></label>
+			<p id="emailError"></p>
+		
+			<!--  계정 삭제 -->
+			<p id="delMsg1">note를 사용하는 계정을 삭제하려고 합니다</p>
+			<p id="delMsg2">계정이 가진 정보와 데이터는 삭제됩니다</p>		
+			<label id="delMsg3"><input type="checkbox" required />예. note의 계정과 데이터를 삭제하고자 합니다.</label>
+			<button type="button" id="confirming"><img src="img/circle.png"></button>
 		</div>
-	</div>
+	</div> 
 	
 	<!-- 노트 -->
 	<br>
@@ -1782,109 +2143,5 @@ window.onload = function() {
 		
 		<div class="support"></div>
 	</div>
-
-	<!-- 계정 -->
-	<div class="modal" id="myModal" aria-hidden="true" style="display: none; z-index: 1060;">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">계정</h4>
-				</div>
-				<div class="modal-body">
-					<button>아이디<span>${corUser.userId}</span></button>
-					<button data-toggle="modal" href="#nameModal" class="movetoModal">이름<span class="changeName">${corUser.userName}</span></button>
-					<button data-toggle="modal" href="#pwModal" class="movetoModal">비밀번호<span>변경하려면 클릭</span></button>
-					<button data-toggle="modal" href="#emailModal" class="movetoModal">이메일<span class="changeEmail">${corUser.userEmail}</span></button>
-					
-				</div>
-				<div class="modal-footer">
-					<button data-toggle="modal" href="#delModal" class="movetoModal">회원탈퇴</button>
-					<button onclick="location='logout'">로그아웃</button>
-				</div>
-				
-			</div>
-		</div>
-	</div>
-
-	<!-- 이름변경 -->
-	<div class="modal" id="nameModal" aria-hidden="true" style="display: none; z-index: 1060;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">이름 변경</h4>
-				</div>
-				<div class="modal-body">
-					<label for="inp" class="inp" id="nameColor"><input type="text" name="userName" placeholder="&nbsp;" autocomplete="off"><span class="label">이름</span><span class="border"></span></label>
-					<p id="nameError"></p>
-				</div>
-				<div class="modal-footer">	
-					<button type="button" id="nameChange">확인</button>
-					<button data-toggle="modal" href="#myModal" class="closeModal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<!-- 비밀번호 변경 -->
-	<div class="modal" id="pwModal" aria-hidden="true" style="display: none; z-index: 1060;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">비밀번호 변경</h4>
-				</div>
-				<div class="modal-body">
-					<label for="inp" class="inp" id="pwColor"><input type="password" name="userPw" placeholder="&nbsp;" autocomplete="off"><span class="label">비밀번호</span><span class="border"></span></label>
-					<p id="pwError"></p>
-					<label for="inp" class="inp" id="pwCheck"><input type="password" name="checkPw" placeholder="&nbsp;" autocomplete="off"><span class="label">비밀번호확인</span><span class="border"></span></label>
-					<p id="pwckError"></p>
-				</div>
-				<div class="modal-footer">	
-					<button type="button" id="pwChange">확인</button>
-					<button data-toggle="modal" href="#myModal" class="closeModal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<!-- 이메일 변경 -->
-	<div class="modal" id="emailModal" aria-hidden="true" style="display: none; z-index: 1060;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">이메일 변경</h4>
-				</div>
-				<div class="modal-body">
-					<label for="inp" class="inp" id="emailColor"><input type="text" name="userEmail" placeholder="&nbsp;" autocomplete="off"><span class="label">이메일</span><span class="border"></span></label>
-					<p id="emailError"></p>
-				</div>
-				<div class="modal-footer">	
-					<button type="button" id="emailChange">확인</button>
-					<button data-toggle="modal" href="#myModal" class="closeModal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- 계정 삭제 -->
-	<div class="modal" id="delModal" aria-hidden="true" style="display: none; z-index: 1060;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">note 계정 삭제하기</h4>
-				</div>
-				<div class="modal-body">
-					<p>note를 사용하는 계정을 삭제하려고 합니다</p>
-					<p>계정을 삭제하는 경우 계정이 가진 정보와 데이터는 삭제됩니다</p>		
-					<label><input type="checkbox" required />예. note의 계정과 모든 데이터를 삭제하고자 합니다.</label>
-				</div>
-				<div class="modal-footer">	
-					<button type="button" onclick="location='delUser'">계정 삭제</button>
-					<button data-toggle="modal" href="#myModal"  class="closeModal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	
 </body>
 </html>

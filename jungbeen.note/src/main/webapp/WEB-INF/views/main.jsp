@@ -1378,7 +1378,7 @@ window.onload = function() {
 		transition-timing-function:ease;
 	}
 	.scene .meta {
-		display:block;
+		display:none;
 	}
 	.shelf {
 		position:fixed;

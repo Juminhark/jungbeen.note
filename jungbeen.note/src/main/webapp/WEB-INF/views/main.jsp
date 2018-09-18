@@ -442,11 +442,11 @@ window.onload = function() {
 										
 										setTimeout(function() {
 											triggerEvent(window,"resize");											
-										}, 500);
+										}, 50);
 										
 										shelf.removeChild(scene);
 										pmReset();
-									}, 500);
+									}, 50);
 								}
 							});
 						}
@@ -490,12 +490,13 @@ window.onload = function() {
 											}, 500);
 											
 											shelf.removeChild(scene);
-											pmReset();
 										}, 500);
 									}
 								});
 							
-							pmReset();
+							setTimeout(function() {
+								pmReset();
+							},50);
 							
 							mistake = false;
 						}, 2000);
@@ -628,7 +629,8 @@ window.onload = function() {
 								//2 : second
 								var log = {c1:"", c2:"", c1c:999999999999, c2c:9999999999999};
 								for(var j = 0; j < notes.length; j++) {
-									if(notes[j] != note) {
+									if(notes[j] != note 
+											&& j != notes.length-1) {//pusher는 거른다.
 										//노트의 크기
 										var w = notes[j].getBoundingClientRect().right - notes[j].getBoundingClientRect().left;
 										var h = notes[j].getBoundingClientRect().bottom - notes[j].getBoundingClientRect().top;
@@ -653,23 +655,24 @@ window.onload = function() {
 									}
 								}
 								
+								
 								var isLast = false;
 								
 								//between length
 								var bl = Math.abs(log.c1.getBoundingClientRect().right - log.c2.getBoundingClientRect().right);
 								if(log.c1 == notes[notes.length-1 -1/*#pusher는 계수하지 않는다.*/] && log.c2c > log.c1c)
 									isLast = true;
-								
+
 								//origin index
 								var oi = Number(note.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-								
+
 								var c1i, c2i;
-								if(!log.c1.classList.contains("mock"))
+								if(!log.c1.children[0].classList.contains("mock"))
 									c1i = Number(log.c1.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
 								else
 									c1i = notes.length-1-1;
 								
-								if(!log.c2.classList.contains("mock"))
+								if(!log.c2.children[0].classList.contains("mock"))
 									c2i = Number(log.c2.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
 								else
 									c2i = notes.length-1-1;
@@ -1353,49 +1356,6 @@ window.onload = function() {
 		$(".demo").css('left','93%');
 		$(".demo").css('width','5rem');
 		$(".demo").css('height','5rem');
-		
-		$('#nameColor input + span').css('color','#0077FF'); 
-		$('#nameColor .border').css('background','#0077FF');  
-		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#nameError").text("");
-		
-		$('#pwColor input + span').css('color','#0077FF'); 
-		$('#pwColor .border').css('background','#0077FF');
-		$('#pwColor input').css('border-bottom','2px solid #0077FF');
-		$("#pwError").text("");	
-		$('#pwCheck input + span').css('color','#0077FF'); 
-		$('#pwCheck .border').css('background','#0077FF');
-		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
-		$("#pwckError").text("");
- 		
- 		$('#emailColor input + span').css('color','#0077FF'); 
-		$('#emailColor .border').css('background','#0077FF');  
-		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#emailError").text("");
-		
-		// 창 변화
-		$("#nameColor").css('display','none');
- 		$("#nameError").css('display','none');
- 		$("#pwColor").css('display','none');
- 		$("#pwError").css('display','none');
- 		$("#pwCheck").css('display','none');
- 		$("#pwckError").css('display','none');
- 		$("#emailColor").css('display','none');
- 		$("#emailError").css('display','none');
- 		$("#delMsg1").css('display','none');
- 		$("#delMsg2").css('display','none');
- 		$("#delMsg3").css('display','none');
- 		$("#back").css('display','none');
- 		$("#next").css('display','none');
- 		$("#confirming").css('display','none');
- 		
- 		$(".myUser").css('display','block');
- 		$("#deleteuser").css('display','block');
- 		$("#logout").css('display','block');
-
- 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
- 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
- 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);
 		
 		setTimeout(function() {$('#icon').css('display','block');}, 700);
 		setTimeout(function() {$(".tomain").css('display','none');}, 700);

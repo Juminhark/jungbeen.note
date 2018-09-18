@@ -178,15 +178,12 @@ $(function(){
 	});
 })
 </script>
-
 <style>
 @import "/note/css/user.css";
-
 #corId{
 	opacity: 0;
 	transition-duration:1s;
 }
-
 .id{
 	display:block;
 	opacity: 0;
@@ -207,9 +204,8 @@ $(function(){
 .pw.inp{
 position : absolute;
 	left : 5rem;
-	top : 12rem;
+	top : 11rem;
 }
-
 #errorMsg{
 	font-size: 1em;
 	position : absolute;
@@ -218,7 +214,6 @@ position : absolute;
 	opacity: 0;
 	transition-duration:1s;
 }
-
 #plus{
 	position : absolute;
 	left : 5rem;
@@ -239,13 +234,10 @@ position : absolute;
 }
 .icon{
 	position : absolute;
-	
 	left : calc(50% - 2.5rem);
 	top : calc(50% - 2.5rem);
-
 	opacity: 0;
 	transition-duration:1s;
-	
 	width: 5rem;
   	height: 5rem;
 }

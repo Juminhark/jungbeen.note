@@ -107,7 +107,7 @@ $(function(){
 				},
 				success:function(user){
 					if(user != ""){
-						var button = $("<form><button type='submit' formaction='http://localhost/note/intoId/' name='userId' value='"+user.userId+"'>"+user.userId+"</button></form>");
+						var button = $("<form><button type='submit' id='idButton' formaction='http://localhost/note/intoId/' name='userId' value='"+user.userId+"'><span>"+user.userId+"</span></button></form>");
 						$("#seleteId").append(button);
 						$("#corName").css('opacity','0');
 						$("#email").css('opacity','0');
@@ -146,7 +146,6 @@ $(function(){
 	});
 })
 </script>
-
 <style>
 @import "/note/css/user.css";
 
@@ -159,7 +158,10 @@ $(function(){
 }
 #name{display: block;}
 #email{display: none;}
-
+#idButton{
+	background-color: transparent;
+	border: none;
+}
 #errorMsg{
 	opacity: 0;
 	font-size: 1em;

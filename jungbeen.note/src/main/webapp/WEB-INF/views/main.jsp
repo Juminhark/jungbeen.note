@@ -440,6 +440,10 @@ window.onload = function() {
 											}
 										}
 										
+										setTimeout(function() {
+											triggerEvent(window,"resize");											
+										}, 500);
+										
 										shelf.removeChild(scene);
 										pmReset();
 									}, 500);
@@ -480,6 +484,10 @@ window.onload = function() {
 														elIdx.innerText = idx-1;
 												}
 											}
+											
+											setTimeout(function() {
+												triggerEvent(window,"resize");											
+											}, 500);
 											
 											shelf.removeChild(scene);
 											pmReset();

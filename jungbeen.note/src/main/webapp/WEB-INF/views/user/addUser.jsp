@@ -284,7 +284,7 @@ $(function(){
 			$("#pwckError").text("비밀번호확인이 입력되지않았습니다");
 		}else{
 			$("#pwCheck").css('opacity','0');
-			$("#pwchError").css('opacity','0');	
+			$("#pwckError").css('opacity','0');	
 		}
 		if($inputEmail.val() ==""){
 			$('#email input + span').css('color','#a30404');

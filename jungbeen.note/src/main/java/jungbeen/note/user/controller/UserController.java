@@ -1,29 +1,35 @@
 package jungbeen.note.user.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jungbeen.note.note.domain.Note;
+import jungbeen.note.note.service.NoteService;
+import jungbeen.note.page.domain.Page;
+import jungbeen.note.page.service.PageService;
 import jungbeen.note.user.domain.Message;
 import jungbeen.note.user.domain.User;
 import jungbeen.note.user.service.HtmlMailService;
 import jungbeen.note.user.service.UserService;
+import jungbeen.note.usernote.domain.UserNote;
+import jungbeen.note.usernote.service.UserNoteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/")
 public class UserController {
 	@Autowired private UserService userService;
+	@Autowired private NoteService noteService;
+	@Autowired private PageService pageService;
+	@Autowired private UserNoteService userNoteService;
 	@Autowired private HtmlMailService mailService;
 	
 	
@@ -31,7 +37,6 @@ public class UserController {
 	public String test(){
 		return "user/test";
 	}
-	
 	
 	////////////////////////////// login.jsp에서 사용 //////////////////////////////
 	@RequestMapping(method = RequestMethod.GET)
@@ -326,8 +331,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/delUser",method = RequestMethod.GET)
-	public String delUser(HttpServletRequest request){
-		
+	public String delUser(HttpServletRequest request, HttpServletResponse response){	
 		String userId = null;
 		Cookie[] cookies = request.getCookies();
 		for(Cookie cookie:cookies){
@@ -336,14 +340,39 @@ public class UserController {
 			}
 		}
 		
+		// 유저노트삭제
+		UserNote userNote = new UserNote();
+		userNote.setUserId(userId);
+		List<UserNote> userNotes = userNoteService.getUserNotes(userNote);
+		userNoteService.delUserNote(userNote);
+		
+		//페이지, 노트삭제
+		for(UserNote delUserNote:userNotes){
+			Page delPage = new Page();
+			delPage.setNoteId(delUserNote.getNoteId());
+			pageService.delPage(delPage);
+			
+			Note delNote = new Note();
+			delNote.setId(delUserNote.getNoteId());
+			noteService.delNote(delNote);
+		}
+
 		User delUser = new User();
 		delUser.setUserId(userId);
-		
 		userService.delUser(delUser);
+		
+		// cokkie, session 삭제
+		request.getSession().invalidate();
+		
+		if(cookies != null){
+			for(int i=0; i< cookies.length; i++){
+				cookies[i].setMaxAge(0); // 유효시간을 0으로 설정
+				response.addCookie(cookies[i]); // 응답 헤더에 추가
+			}
+		}
 		
 		return "redirect:/";
 	}
-
 	/////////////////////////////////////////////////////////////////////////////
 	
 	

@@ -1354,6 +1354,49 @@ window.onload = function() {
 		$(".demo").css('width','5rem');
 		$(".demo").css('height','5rem');
 		
+		$('#nameColor input + span').css('color','#0077FF'); 
+		$('#nameColor .border').css('background','#0077FF');  
+		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#nameError").text("");
+		
+		$('#pwColor input + span').css('color','#0077FF'); 
+		$('#pwColor .border').css('background','#0077FF');
+		$('#pwColor input').css('border-bottom','2px solid #0077FF');
+		$("#pwError").text("");	
+		$('#pwCheck input + span').css('color','#0077FF'); 
+		$('#pwCheck .border').css('background','#0077FF');
+		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+		$("#pwckError").text("");
+ 		
+ 		$('#emailColor input + span').css('color','#0077FF'); 
+		$('#emailColor .border').css('background','#0077FF');  
+		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#emailError").text("");
+		
+		// 창 변화
+		$("#nameColor").css('display','none');
+ 		$("#nameError").css('display','none');
+ 		$("#pwColor").css('display','none');
+ 		$("#pwError").css('display','none');
+ 		$("#pwCheck").css('display','none');
+ 		$("#pwckError").css('display','none');
+ 		$("#emailColor").css('display','none');
+ 		$("#emailError").css('display','none');
+ 		$("#delMsg1").css('display','none');
+ 		$("#delMsg2").css('display','none');
+ 		$("#delMsg3").css('display','none');
+ 		$("#back").css('display','none');
+ 		$("#next").css('display','none');
+ 		$("#confirming").css('display','none');
+ 		
+ 		$(".myUser").css('display','block');
+ 		$("#deleteuser").css('display','block');
+ 		$("#logout").css('display','block');
+
+ 		setTimeout(function() {$(".myUser").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 800);
+ 		setTimeout(function() {$("#logout").css('opacity','1');}, 800);
+		
 		setTimeout(function() {$('#icon').css('display','block');}, 700);
 		setTimeout(function() {$(".tomain").css('display','none');}, 700);
 	});

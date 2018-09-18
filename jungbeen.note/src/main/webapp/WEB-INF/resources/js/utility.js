@@ -20,11 +20,11 @@ function setCssVar(name, value) {
 	document.querySelector(":root").style.setProperty("--" + name, value);
 }
 
-function removeClass(name) {
+function removeClass(el, name) {
 	do {
-		var node = document.getElementsByClassName(name)[0];
+		var node = el.getElementsByClassName(name)[0];
 		node.classList.remove(name);
-		node = document.getElementsByClassName(name)[0];
+		node = el.getElementsByClassName(name)[0];
 	} while(node != undefined);
 }
 

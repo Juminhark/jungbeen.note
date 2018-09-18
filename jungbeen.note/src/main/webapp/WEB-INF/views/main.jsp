@@ -175,7 +175,7 @@ window.onload = function() {
 				nameIn.children[0].onkeydown = function(e) {
 					if(e.keyCode == 13) {
 						var noteName = this.value;
-						note.getElementsByClassName("name")[0].innerText = noteName;
+						//note.getElementsByClassName("name")[0].innerText = noteName;
 						
 						if(noteName != "")
 							ajax({url:"/note/edit", 
@@ -188,7 +188,9 @@ window.onload = function() {
 								       ], 
 								success:function() {
 								setTimeout(function() {
-										reForm.children[0].click();				
+										//reForm.children[0].click();	
+										note.getElementsByClassName("name")[0].innerText = noteName;
+										pmReset();
 									}, 500);
 								}
 							});
@@ -323,7 +325,9 @@ window.onload = function() {
 													       {name:"noteId", value:noteId},
 													       {name:"isOwner", value:1}
 													],
-													success:function() {pmReset();}
+													success:function() {
+														pmReset();
+													}
 												});
 											}
 										});
@@ -423,7 +427,22 @@ window.onload = function() {
 									   		{name:"noteIdx", value:noteIdx}
 								       ], 
 								success:function() {
-									reForm.children[0].click();
+									setTimeout(function() {
+										//reForm.children[0].click();
+										var scenes = document.getElementsByClassName("scene");
+
+										for(var s = 0; s < scenes.length; s++) {
+											if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
+												var elIdx = scenes[s].getElementsByClassName("idx")[0];
+												var idx = Number(elIdx.innerText.trim());
+												if(idx > noteIdx)
+													elIdx.innerText = idx-1;
+											}
+										}
+										
+										shelf.removeChild(scene);
+										pmReset();
+									}, 500);
 								}
 							});
 						}
@@ -450,7 +469,20 @@ window.onload = function() {
 									       ], 
 									success:function() {
 										setTimeout(function() {
-											reForm.children[0].click();				
+											//reForm.children[0].click();
+											var scenes = document.getElementsByClassName("scene");
+
+											for(var s = 0; s < scenes.length; s++) {
+												if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
+													var elIdx = scenes[s].getElementsByClassName("idx")[0];
+													var idx = Number(elIdx.innerText.trim());
+													if(idx > noteIdx)
+														elIdx.innerText = idx-1;
+												}
+											}
+											
+											shelf.removeChild(scene);
+											pmReset();
 										}, 500);
 									}
 								});
@@ -468,7 +500,7 @@ window.onload = function() {
 						optColors[j].onclick = function() {
 							var noteColor = getStyle(this, "background-color");
 
-							note.parentElement.style.setProperty("--note-color", noteColor);
+							//note.parentElement.style.setProperty("--note-color", noteColor);
 							if(noteColor != "")
 								ajax({url:"/note/edit", 
 									method:"post", 
@@ -480,7 +512,9 @@ window.onload = function() {
 									       ], 
 									success:function() {
 										setTimeout(function() {
-											reForm.children[0].click();				
+											//reForm.children[0].click();		
+											note.parentElement.style.setProperty("--note-color", noteColor);
+											pmReset();
 										}, 500);
 									}
 								});
@@ -506,7 +540,7 @@ window.onload = function() {
 											exit = true;
 									
 									if(!exit) {
-										note.parentElement.style.setProperty("--note-color", noteColor);
+										//note.parentElement.style.setProperty("--note-color", noteColor);
 										
 										if(noteColor != "")
 											ajax({url:"/note/edit", 
@@ -519,7 +553,9 @@ window.onload = function() {
 												       ], 
 												success:function() {
 												setTimeout(function() {
-														reForm.children[0].click();				
+														//reForm.children[0].click();	
+														note.parentElement.style.setProperty("--note-color", noteColor);
+														pmReset();
 													}, 500);
 												}
 											});
@@ -540,128 +576,171 @@ window.onload = function() {
 					var note = scene.getElementsByClassName("note")[0];
 					scene.style.transitionDuration = "0s";
 					
-					//사용자가 마우스를 누르고, 뗄때까지의 시간을 계산
+					var isPicked;
+					
+					isPicked = true;
+					
 					var start = new Date();
+					var end = new Date();
 					
 					window.onmousemove = function(ev) {
 						if(ev.which == 1) {
-							var end = new Date()
-							
-							if(end - start > 100) {
+							if(isPicked) {
 								var sel = window.getSelection();
 								sel.removeAllRanges();
-								
+	
 								triggerEvent(note.parentElement, "mouseleave");
 								
 								scene.style.left = ev.clientX - window.innerWidth / 10 - e.offsetX +"px";
 								scene.style.top = ev.clientY - window.innerHeight / 10 - e.offsetY + "px";
-							
-								window.onmouseup = function(eve) {
-									if(eve.which == 1) {
-										var end = new Date();
-										
-										if(end - start > 500) {
-											//-----------------------------//
-											var ex = eve.clientX;
-											var ey = eve.clientY;
-											
-											//c : closest 
-											//cc : closest coordinate
-											//1 : most
-											//2 : second
-											var log = {c1:"", c2:"", c1c:999999999999, c2c:9999999999999};
-											for(var j = 0; j < notes.length; j++) {
-												if(notes[j] != note) {
-													//노트의 크기
-													var w = notes[j].getBoundingClientRect().right - notes[j].getBoundingClientRect().left;
-													var h = notes[j].getBoundingClientRect().bottom - notes[j].getBoundingClientRect().top;
-													
-													//노트의 중심 좌표
-													var x = notes[j].getBoundingClientRect().left + w / 2;
-													var y = notes[j].getBoundingClientRect().top + h / 2;
-													
-													var l = Math.cbrt(Math.pow((ex - x), 2) + Math.pow((ey - y), 2));
-													
-													if(log.c1c > l) {
-														log.c2 = log.c1;
-														log.c1 = notes[j];
-														
-														log.c2c = log.c1c;
-														log.c1c = l;
-													} else if(log.c2c > l) {
-														log.c2 = notes[j];
-														
-														log.c2c = l;
-													}
-												}
-											}
-											
-											var isLast = false;
-											
-											//between length
-											var bl = Math.abs(log.c1.getBoundingClientRect().right - log.c2.getBoundingClientRect().right);
-											if(log.c1 == notes[notes.length-1 -1/*#pusher는 계수하지 않는다.*/] && log.c2c > log.c1c)
-												isLast = true;
-											
-											//origin index
-											var oi = Number(note.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-											
-											var c1i, c2i;
-											if(!log.c1.classList.contains("mock"))
-												c1i = Number(log.c1.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-											else
-												c1i = notes.length-1-1;
-											
-											if(!log.c2.classList.contains("mock"))
-												c2i = Number(log.c2.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-											else
-												c2i = notes.length-1-1;
-											
-											//change index
-											var ci;
-											
-											if(isLast) {
-												shelf.appendChild(scene);
-												ci = c1i;
-											} else if(c1i < c2i) {
-												shelf.insertBefore(scene, log.c1.parentElement);
-												ci = c1i;
-											} else {
-												shelf.insertBefore(scene, log.c2.parentElement);
-												ci = c2i;
-											}
-											
-											//#pusher는 항상 마지막에 와야한다.
-											shelf.appendChild(pusher);
-											//-----------------------------//
-										
-											var noteId = Number(note.nextElementSibling.getElementsByClassName("id")[0].innerText.trim());
+							} else {
+								window.onmousemove = undefined;
+								scene.style.transitionDuration = "0.5s";
+							}
+						} else {
+							window.onmousemove = undefined;
+							scene.style.transitionDuration = "0.5s";
+						}
+					}
 					
-											ajax({url:"/note/reAlign", 
-												method:"post", 
-												param:[
-													       {name:"originIdx", value:oi}, 
-													       {name:"changeIdx", value:ci},
-													       {name:"noteId", value:noteId},
-													       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
-													       {name:"isLast", value:isLast}
-												       ], 
-												success:function() {
-												setTimeout(function() {
-														reForm.children[0].click();				
-													}, 500);
-												}
-											});
-											
-											isLast = false;
-										}
+					window.onmouseup = function(ev) {
+						if(ev.which == 1 && isPicked) {
+							var end = new Date();
+							
+							if(end - start > 500) {
+								scene.style.transitionDuration = "0.5s";
+								
+								//-----------------------------//
+								var ex = ev.clientX;
+								var ey = ev.clientY;
+								
+								//c : closest 
+								//cc : closest coordinate
+								//1 : most
+								//2 : second
+								var log = {c1:"", c2:"", c1c:999999999999, c2c:9999999999999};
+								for(var j = 0; j < notes.length; j++) {
+									if(notes[j] != note) {
+										//노트의 크기
+										var w = notes[j].getBoundingClientRect().right - notes[j].getBoundingClientRect().left;
+										var h = notes[j].getBoundingClientRect().bottom - notes[j].getBoundingClientRect().top;
 										
-										scene.style.transitionDuration = "0.5s";
-										window.onmousemove = undefined;
-										triggerEvent(window, "resize");
+										//노트의 중심 좌표
+										var x = notes[j].getBoundingClientRect().left + w / 2;
+										var y = notes[j].getBoundingClientRect().top + h / 2;
+										
+										var l = Math.cbrt(Math.pow((ex - x), 2) + Math.pow((ey - y), 2));
+										
+										if(log.c1c > l) {
+											log.c2 = log.c1;
+											log.c1 = notes[j];
+											
+											log.c2c = log.c1c;
+											log.c1c = l;
+										} else if(log.c2c > l) {
+											log.c2 = notes[j];
+											
+											log.c2c = l;
+										}
 									}
 								}
+								
+								var isLast = false;
+								
+								//between length
+								var bl = Math.abs(log.c1.getBoundingClientRect().right - log.c2.getBoundingClientRect().right);
+								if(log.c1 == notes[notes.length-1 -1/*#pusher는 계수하지 않는다.*/] && log.c2c > log.c1c)
+									isLast = true;
+								
+								//origin index
+								var oi = Number(note.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+								
+								var c1i, c2i;
+								if(!log.c1.classList.contains("mock"))
+									c1i = Number(log.c1.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+								else
+									c1i = notes.length-1-1;
+								
+								if(!log.c2.classList.contains("mock"))
+									c2i = Number(log.c2.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+								else
+									c2i = notes.length-1-1;
+								
+								//change index
+								var ci;
+								
+								if(isLast) {
+									shelf.appendChild(scene);
+									ci = c1i;
+								} else if(c1i < c2i) {
+									shelf.insertBefore(scene, log.c1.parentElement);
+									ci = c1i;
+								} else {
+									shelf.insertBefore(scene, log.c2.parentElement);
+									ci = c2i;
+								}
+								
+								//#pusher는 항상 마지막에 와야한다.
+								shelf.appendChild(pusher);
+								//-----------------------------//
+							
+								var noteId = Number(note.nextElementSibling.getElementsByClassName("id")[0].innerText.trim());
+		
+								ajax({url:"/note/reAlign", 
+									method:"post", 
+									param:[
+										       {name:"originIdx", value:oi}, 
+										       {name:"changeIdx", value:ci},
+										       {name:"noteId", value:noteId},
+										       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
+										       {name:"isLast", value:isLast}
+									       ], 
+									success:function() {
+										setTimeout(function() {
+											//reForm.children[0].click();	
+											var scenes = document.getElementsByClassName("scene");
+											for(var s = 1; s < scenes.length-1; s++) {
+												var sId = scenes[s].getElementsByClassName("id")[0];
+												var sIdx = scenes[s].getElementsByClassName("idx")[0];
+												var id = Number(sId.innerText.trim());
+												var idx = Number(sIdx.innerText.trim());
+												
+												if(id != noteId) {
+													if(isLast) {
+														if(ci <= idx && idx <= oi-1)
+															sIdx.innerText = idx+1;
+													} else if(oi < ci) {
+														if(oi+1 <= idx && idx <= ci)
+															sIdx.innerText = idx-1;
+													} else if(oi > ci) {
+														if(ci+1 <= idx && idx <= oi-1)
+															sIdx.innerText = idx+1;
+													}
+												} else {
+													sIdx.innerText = oi < ci || isLast ? ci : ci+1;
+												}
+											}
+											
+											isLast = false;
+											triggerEvent(window, "resize");
+										}, 500);
+									},
+									fail:function() {
+										isLast = false;
+									}
+								});
+								
+								triggerEvent(window, "resize");
+								
+								isPicked = false;
+							} else {
+								window.onmouseup = undefined;
+								triggerEvent(window, "resize");
+								scene.style.transitionDuration = "0.5s";
 							}
+						} else {
+							window.onmouseup = undefined;
+							scene.style.transitionDuration = "0.5s";
 						}
 					}
 				}
@@ -770,7 +849,7 @@ window.onload = function() {
 		var color = "rgb(" + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + ")";
 		
 		this.removeAttribute("style");
-		removeClass("mock");
+		removeClass(this, "mock");
 		this.setAttribute("style", "--note-color:" + color);
 		
 		this.children[0].style.setProperty("--note-shadow-width", Number(getCssVar("note-standard-size").split("px")[0]) + "px");
@@ -1291,7 +1370,7 @@ window.onload = function() {
 		transition-timing-function:ease;
 	}
 	.scene .meta {
-		display:none;
+		display:block;
 	}
 	.shelf {
 		position:fixed;

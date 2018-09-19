@@ -17,6 +17,11 @@
   		ORDER BY 2
 	</select>
 	
+	<select id="NEXTVAL" resultType="int">
+		SELECT imgId_seq.NEXTVAL
+		FROM dual
+	</select>
+	
 	<insert id="insertPage" parameterType="page">
 		INSERT INTO pages
 		VALUES (#{noteId}, page_pageId_seq.NEXTVAL, #{idx}, NVL(#{content1}, ''), NVL(#{content2}, ''), NVL(#{content3}, ''), NVL(#{content4}, ''), NVL(#{content5}, ''))

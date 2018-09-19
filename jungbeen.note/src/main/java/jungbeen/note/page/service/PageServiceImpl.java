@@ -23,6 +23,11 @@ public class PageServiceImpl implements PageService {
 	}
 	
 	@Override
+	public int NEXTVAL() {
+		return pageDao.NEXTVAL();
+	}
+	
+	@Override
 	public boolean addPage(Page page) {
 		return pageDao.insertPage(page) > 0;
 	}

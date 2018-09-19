@@ -23,6 +23,11 @@ public class PageDaoImpl implements PageDao {
 	}
 	
 	@Override
+	public int NEXTVAL() {
+		return pageMapper.NEXTVAL();
+	}
+	
+	@Override
 	public int insertPage(Page page) {
 		return pageMapper.insertPage(page);
 	}

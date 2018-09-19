@@ -48,12 +48,26 @@ window.onload = function() {
 		pageSizeRatio *= ratio;
 		setCssVar("page-size-ratio", pageSizeRatio);
 	}
+	
+	function optimize() {
+		var html;
+		do {
+			html = page.innerHTML;
+			
+			for(var i = 0; i < page.children.length; i++)
+				if(page.children[i].innerHTML == "" 
+						&& page.children[i].nodeName != "IMG")
+					page.removeChild(page.children[i]);
+		} while(html != page.innerHTML)
+	}
 
 	function sync() {
 		var content = page.innerHTML;
 		
 		content = content.replace(/&nbsp;/g, " ");
 		content = content.replace(/&[a-z.]*;/g, "");
+		
+		optimize();
 		
 		var content1 = "";
 		var content2 = "";
@@ -118,8 +132,9 @@ window.onload = function() {
 	}
 	
 	page.onkeydown = function(e) {
-		if(sync())
-			console.log("글자 수 제한을 초과하였습니다.");		
+		if(!sync())
+			console.log("글자 수 제한을 초과하였습니다.");
+		
 	    if (e.keyCode === 9) { // tab key
 	        e.preventDefault();  // this will prevent us from tabbing out of the editor
 
@@ -130,12 +145,12 @@ window.onload = function() {
 	page.oncontextmenu = function(e) {
 		e.preventDefault();
 		
-		var sel = window.getSelection();
-		var cursor = sel.anchorNode.parentElement;
-		
-		if(sel.isCollapsed) {
+		var cursor = e.target;
+
+		if(window.getSelection().isCollapsed) {
 			if(cursor.getAttribute("style") != undefined &&
-					findAncestor(cursor, page)) {
+					findAncestor(cursor, page) && 
+					cursor.nodeName != "IMG") {
 				
 			    var sel = RangeEx.setRange({
 			    	startNode:cursor.firstChild == null ? cursor : cursor.firstChild, 
@@ -169,6 +184,15 @@ window.onload = function() {
 				
 				popup(e.clientX, e.clientY, 200, 40);
 			}
+			
+			if(findAncestor(cursor, page) && 
+					cursor.nodeName == "IMG") {
+				
+				if(cursor.getAttribute("style"))
+					cursor.removeAttribute("style");
+				else
+					cursor.setAttribute("style", "box-shadow:0px 5px 10px 1px rgba(0, 0, 0, 0.5)");
+			}
 		}
 	}
 
@@ -196,10 +220,10 @@ window.onload = function() {
 	}
 	
 	page.onmouseup = function(e) {
-		var sel = window.getSelection();
-		var cursor = sel.anchorNode.parentElement;
-		
-		if(e.which == 1)
+		if(e.which == 1) {
+			var sel = window.getSelection();
+			var cursor = sel.anchorNode.parentElement;
+			
 			if(!sel.isCollapsed && findAncestor(cursor, page)) {			
 				RangeEx.surroundContents({
 					tagName:"span",
@@ -211,6 +235,50 @@ window.onload = function() {
 				
 				popup(e.clientX, e.clientY);
 			}
+		}
+	}
+	
+	page.onpaste = function(e) {
+		e.preventDefault();
+		
+		var items = e.clipboardData.items;
+		for(var i = 0; i < items.length; i++) {
+			var item = items[i];
+			if(item.type.indexOf("image") != -1) {				
+				var file = item.getAsFile();
+				var fd = new FormData();
+				fd.append("uploadFile", file);
+				
+				ajax({
+					url:"/note/page/upFile",
+					method:"post",
+					data:fd,
+					serialize:true,
+					success:function(response) {
+						var sel = window.getSelection();
+						var isPng = response.split(".")[1] == "png" ? true : false;
+						
+						if(isPng)
+							RangeEx.insertNode({
+								range:sel.getRangeAt(0),
+								tagName:"img",
+								attribute:[
+									{name:"src", value:"/note/upload/" + response},
+								]
+							});
+						else
+							RangeEx.insertNode({
+								range:sel.getRangeAt(0),
+								tagName:"img",
+								attribute:[
+									{name:"src", value:"/note/upload/" + response},
+									{name:"style", value:"0px 5px 10px 1px rgba(0, 0, 0, 0.5)"}
+								]
+							});
+					}
+				});
+			}
+		}
 	}
 
 	page.ondragover = function(e) {
@@ -236,7 +304,8 @@ window.onload = function() {
 		e.preventDefault();
 		
 		var droppedNode = document.elementFromPoint(e.clientX, e.clientY);
-		if(droppedNode == page)
+		if(droppedNode == page || 
+				droppedNode.nodeName == "BR")
 			droppedNode = page.lastChild;
 		
 		var files = e.dataTransfer.files;
@@ -288,6 +357,8 @@ window.onload = function() {
 		}
 	}
 
+
+	
 	//text-menu
 	function hide(el) {
 		el.style.display = "none";
@@ -299,6 +370,8 @@ window.onload = function() {
 	
 	function reset(width, height) {
 		hide(tm);
+		
+		optimize();
 		
 		if(width != undefined)
 			tm.style.width = width + "px";
@@ -742,7 +815,7 @@ window.onload = function() {
 	background-color:#D8D8D8;
 }
 .page img {
-	width:100%;
+	max-width:100%;
 	border-radius:1%;
 }
 :root {

@@ -10,4 +10,6 @@ public interface PageService {
 	boolean addPage(Page page);
 	boolean editPage(Page page);
 	boolean delPage(Page page);
+	
+	int NEXTVAL();
 }

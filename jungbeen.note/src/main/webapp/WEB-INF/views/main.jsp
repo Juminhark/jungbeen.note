@@ -1357,6 +1357,65 @@ window.onload = function() {
 		$(".demo").css('width','5rem');
 		$(".demo").css('height','5rem');
 		
+ 		// 오류상황 해제
+ 		$('#nameColor input + span').css('color','#0077FF'); 
+		$('#nameColor .border').css('background','#0077FF');  
+		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#nameError").text("");
+		
+		$('#pwColor input + span').css('color','#0077FF'); 
+		$('#pwColor .border').css('background','#0077FF');
+		$('#pwColor input').css('border-bottom','2px solid #0077FF');
+		$("#pwError").text("");	
+		$('#pwCheck input + span').css('color','#0077FF'); 
+		$('#pwCheck .border').css('background','#0077FF');
+		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
+		$("#pwckError").text("");
+ 		
+ 		$('#emailColor input + span').css('color','#0077FF'); 
+		$('#emailColor .border').css('background','#0077FF');  
+		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
+		$("#emailError").text("");
+		
+		// 창 변화
+ 		$("#nameColor").css('opacity','0');	
+ 		$("#nameError").css('opacity','0');
+ 		$("#pwColor").css('opacity','0');
+ 		$("#pwError").css('opacity','0');
+ 		$("#pwCheck").css('opacity','0');
+ 		$("#pwckError").css('opacity','0');
+ 		$("#emailCheck").css('opacity','0');
+ 		$("#emailError").css('opacity','0');
+ 		$("#delMsg1").css('opacity','0');
+ 		$("#delMsg2").css('opacity','0');
+ 		$("#delMsg3").css('opacity','0');
+ 		$("#back").css('opacity','0');
+ 		$("#next").css('opacity','0');
+ 		$("#confirming").css('opacity','0');
+ 		
+ 		$("#nameColor").css('display','none');
+ 		$("#nameError").css('display','none');
+ 		$("#pwColor").css('display','none');
+ 		$("#pwError").css('display','none');
+ 		$("#pwCheck").css('display','none');
+ 		$("#pwckError").css('display','none');
+ 		$("#emailColor").css('display','none');
+ 		$("#emailError").css('display','none');
+ 		$("#delMsg1").css('display','none');
+ 		$("#delMsg2").css('display','none');
+ 		$("#delMsg3").css('display','none');
+ 		$("#back").css('display','none');
+ 		$("#next").css('display','none');
+ 		$("#confirming").css('display','none');
+ 		
+ 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
+ 		setTimeout(function() {$("#logout").css('display','block');}, 700);
+
+ 		setTimeout(function() {$(".myUser").css('opacity','1');}, 700);
+ 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 700);
+ 		setTimeout(function() {$("#logout").css('opacity','1');}, 700);
+		
 		setTimeout(function() {$('#icon').css('display','block');}, 700);
 		setTimeout(function() {$(".tomain").css('display','none');}, 700);
 	});

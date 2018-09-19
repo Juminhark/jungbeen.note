@@ -10,4 +10,6 @@ public interface PageMapper {
 	int insertPage(Page page);
 	int updatePage(Page page);
 	int deletePage(Page page);
+	
+	int NEXTVAL();
 }

@@ -141,15 +141,11 @@ window.onload = function() {
 			param:[{name:"noteId", value:"<%= ((List<Page>)request.getAttribute("pages")).get(0).getNoteId() %>"}],
 			success:function(response) {
 				for(var i = 0; i < response.length; i++) {
-					console.log(response[i].content1);
 					var preview = pageBgs[i].previousElementSibling;
 					var text = getPreview(html2text(response[i].content1).trim());
-					console.log(text.length);
 					
 					if(text != null)
 						text = text.length > 20 ? text.substring(0, 20) + " ..." : text;
-					
-						console.log(text);
 						
 					preview.innerHTML = text.trim();
 				}
@@ -306,7 +302,6 @@ window.onload = function() {
 		<input type="submit">
 	</form>
 	
-	<%= ((List<Page>)request.getAttribute("pages")).get(0).getNoteId() %>
 	<iframe name="pageFrame" allowtransparency="true" frameborder="0" width="30px" height="300px"></iframe>
 	
     <div class="note">

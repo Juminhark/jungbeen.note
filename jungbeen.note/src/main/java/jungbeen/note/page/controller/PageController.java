@@ -47,16 +47,14 @@ public class PageController {
 		
 		boolean success = false;
 		
-		if(content1 != null && !content1.equals("")) {
-			Page alter = new Page();
-			alter.setId(id);
-			alter.setContent1(content1);
-			alter.setContent2(content2);
-			alter.setContent3(content3);
-			alter.setContent4(content4);
-			alter.setContent5(content5);
-			success = pageService.editPage(alter);
-		}		
+		Page alter = new Page();
+		alter.setId(id);
+		alter.setContent1(content1);
+		alter.setContent2(content2);
+		alter.setContent3(content3);
+		alter.setContent4(content4);
+		alter.setContent5(content5);
+		success = pageService.editPage(alter);
 		
 		return success;
 	}
@@ -72,10 +70,10 @@ public class PageController {
 	@RequestMapping(value="/upFile", method=RequestMethod.POST)
 	@ResponseBody
 	public String upload(MultipartFile uploadFile, HttpServletRequest request) {
-		System.out.println(uploadFile);
-		
 		String dir = request.getSession().getServletContext().getRealPath("/upload");
 		String fileName = uploadFile.getOriginalFilename();
+		fileName = pageService.NEXTVAL() + "." + fileName.split("\\.")[1];
+		
 		try {
 			uploadFile.transferTo(new File(dir + "/" + fileName));
 		} catch (Exception e) {}

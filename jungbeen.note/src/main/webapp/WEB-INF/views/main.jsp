@@ -581,6 +581,9 @@ window.onload = function() {
 			
 			notes[i].parentElement.onmousedown = function(e) {
 				if(e.which == 1) {
+					var sel = window.getSelection();
+					sel.removeAllRanges();
+					
 					var scene = this;
 					var note = scene.getElementsByClassName("note")[0];
 					scene.style.transitionDuration = "0s";
@@ -594,29 +597,39 @@ window.onload = function() {
 					
 					window.onmousemove = function(ev) {
 						if(ev.which == 1) {
-							if(isPicked) {
-								var sel = window.getSelection();
-								sel.removeAllRanges();
-	
+							end = new Date();
+							var sel = window.getSelection();
+							sel.removeAllRanges();
+							
+							if(isPicked && end-start > 500) {
+
 								triggerEvent(note.parentElement, "mouseleave");
 								
 								scene.style.left = ev.clientX - window.innerWidth / 10 - e.offsetX +"px";
 								scene.style.top = ev.clientY - window.innerHeight / 10 - e.offsetY + "px";
 							} else {
+								window.onmouseup = undefined;
 								window.onmousemove = undefined;
+								triggerEvent(window, "resize");
 								scene.style.transitionDuration = "0.5s";
+								start = 0;
+								end = 0;
 							}
 						} else {
+							window.onmouseup = undefined;
 							window.onmousemove = undefined;
+							triggerEvent(window, "resize");
 							scene.style.transitionDuration = "0.5s";
+							start = 0;
+							end = 0;
 						}
 					}
 					
 					window.onmouseup = function(ev) {
-						if(ev.which == 1 && isPicked) {
+						if(ev.which == 1) {
 							var end = new Date();
 							
-							if(end - start > 500) {
+							if(isPicked && end - start > 500) {
 								scene.style.transitionDuration = "0.5s";
 								
 								//-----------------------------//
@@ -733,7 +746,13 @@ window.onload = function() {
 											}
 											
 											isLast = false;
+
+											window.onmouseup = undefined;
+											window.onmousemove = undefined;
 											triggerEvent(window, "resize");
+											scene.style.transitionDuration = "0.5s";
+											start = 0;
+											end = 0;
 										}, 500);
 									},
 									fail:function() {
@@ -741,17 +760,29 @@ window.onload = function() {
 									}
 								});
 								
+								window.onmouseup = undefined;
+								window.onmousemove = undefined;
 								triggerEvent(window, "resize");
+								scene.style.transitionDuration = "0.5s";
+								start = 0;
+								end = 0;
 								
 								isPicked = false;
 							} else {
 								window.onmouseup = undefined;
+								window.onmousemove = undefined;
 								triggerEvent(window, "resize");
 								scene.style.transitionDuration = "0.5s";
+								start = 0;
+								end = 0;
 							}
 						} else {
 							window.onmouseup = undefined;
+							window.onmousemove = undefined;
+							triggerEvent(window, "resize");
 							scene.style.transitionDuration = "0.5s";
+							start = 0;
+							end = 0;
 						}
 					}
 				}
@@ -871,18 +902,19 @@ window.onload = function() {
 		shelf.insertBefore(pusher, this);
 		triggerEvent(window, "resize");
 		
-		ajax({url:"/note/add", 
-			method:"post", 
-			param:[
-				       {name:"idx", value:notes.length - 1-1}, 
-				       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
-				       {name:"color", value:color}
-			       ], 
-			success:function() {
-				setTimeout(function() {
-					reForm.children[0].click();				
-				}, 500);
-		}});
+		setTimeout(function() {
+			ajax({url:"/note/add", 
+				method:"post", 
+				param:[
+					       {name:"idx", value:notes.length - 1-1}, 
+					       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
+					       {name:"color", value:color}
+				       ], 
+				success:function() {
+					reForm.children[0].click();
+				}
+			});
+		}, 500);
 	}
 	
 	alignNotes();

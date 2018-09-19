@@ -15,6 +15,12 @@ window.onload = function() {
 	var noteForm = document.getElementById("showNote");
 	var reForm = document.getElementById("refresh");
 	var pusher = document.getElementById("pusher");
+	
+	//하나의 노트가 삭제되는 동안 
+	//다른 노트의 삭제나 노트의 생성이 이루어지면 노트의 인덱스가
+	//꼬이게 된다.
+	//그것을 막기 위한 변수이다.
+	var ondeleting = false;
 
 	var pm = document.getElementsByClassName("popup-menu")[0];
 	
@@ -371,15 +377,14 @@ window.onload = function() {
 				}
 				
 				del.onmousedown = function(e) {
-					if(e.which == 1) {
+					if(e.which == 1 && !ondeleting) {
 						var mistake = false;
 						var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);
 						var shWidth = Number(getCssVar("note-shadow-width").split("px")[0]);
 						var shHeight = Number(getCssVar("note-shadow-height").split("px")[0]);
 						var scene = note.parentElement;
 						
-						
-						var start = new Date();
+						ondeleting = true;
 						
 						undo.onclick = function() {
 							var end = new Date();
@@ -427,26 +432,25 @@ window.onload = function() {
 									   		{name:"noteIdx", value:noteIdx}
 								       ], 
 								success:function() {
-									setTimeout(function() {
-										//reForm.children[0].click();
-										var scenes = document.getElementsByClassName("scene");
+									//reForm.children[0].click();
+									var scenes = document.getElementsByClassName("scene");
 
-										for(var s = 0; s < scenes.length; s++) {
-											if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
-												var elIdx = scenes[s].getElementsByClassName("idx")[0];
-												var idx = Number(elIdx.innerText.trim());
-												if(idx > noteIdx)
-													elIdx.innerText = idx-1;
-											}
+									for(var s = 0; s < scenes.length; s++) {
+										if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
+											var elIdx = scenes[s].getElementsByClassName("idx")[0];
+											var idx = Number(elIdx.innerText.trim());
+											if(idx > noteIdx)
+												elIdx.innerText = idx-1;
 										}
-										
-										setTimeout(function() {
-											triggerEvent(window,"resize");											
-										}, 50);
-										
+									}
+									
+									setTimeout(function() {
+										triggerEvent(window,"resize");											
 										shelf.removeChild(scene);
 										pmReset();
-									}, 50);
+										
+										ondeleting = false;
+									},500);
 								}
 							});
 						}
@@ -472,31 +476,27 @@ window.onload = function() {
 										   		{name:"noteIdx", value:noteIdx}
 									       ], 
 									success:function() {
-										setTimeout(function() {
-											//reForm.children[0].click();
-											var scenes = document.getElementsByClassName("scene");
+										//reForm.children[0].click();
+										var scenes = document.getElementsByClassName("scene");
 
-											for(var s = 0; s < scenes.length; s++) {
-												if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
-													var elIdx = scenes[s].getElementsByClassName("idx")[0];
-													var idx = Number(elIdx.innerText.trim());
-													if(idx > noteIdx)
-														elIdx.innerText = idx-1;
-												}
+										for(var s = 0; s < scenes.length; s++) {
+											if(s != 0 && s != scenes.length-1) {//mock과 pusher 패스
+												var elIdx = scenes[s].getElementsByClassName("idx")[0];
+												var idx = Number(elIdx.innerText.trim());
+												if(idx > noteIdx)
+													elIdx.innerText = idx-1;
 											}
-											
-											setTimeout(function() {
-												triggerEvent(window,"resize");											
-											}, 500);
-											
+										}
+										
+										setTimeout(function() {
+											triggerEvent(window,"resize");											
 											shelf.removeChild(scene);
-										}, 500);
+											pmReset();
+											
+											ondeleting = false;
+										},500);
 									}
 								});
-							
-							setTimeout(function() {
-								pmReset();
-							},50);
 							
 							mistake = false;
 						}, 2000);
@@ -601,7 +601,7 @@ window.onload = function() {
 							var sel = window.getSelection();
 							sel.removeAllRanges();
 							
-							if(isPicked && end-start > 500) {
+							if(isPicked && end-start > 100) {
 
 								triggerEvent(note.parentElement, "mouseleave");
 								
@@ -629,7 +629,7 @@ window.onload = function() {
 						if(ev.which == 1) {
 							var end = new Date();
 							
-							if(isPicked && end - start > 500) {
+							if(isPicked && end - start > 100) {
 								scene.style.transitionDuration = "0.5s";
 								
 								//-----------------------------//
@@ -888,33 +888,35 @@ window.onload = function() {
 	
 	//mock note's scene
 	shelf.children[0].onclick = function(e) {
-		var color = "rgb(" + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + ")";
-		
-		this.removeAttribute("style");
-		removeClass(this, "mock");
-		this.setAttribute("style", "--note-color:" + color);
-		
-		this.children[0].style.setProperty("--note-shadow-width", Number(getCssVar("note-standard-size").split("px")[0]) + "px");
-		this.children[0].style.setProperty("--note-shadow-height", Number(getCssVar("note-standard-size").split("px")[0]) * 1.5 + "px");
-		this.children[1].setAttribute("class", "note show-front");
-		
-		pusher.style.display = "inline-block";
-		shelf.insertBefore(pusher, this);
-		triggerEvent(window, "resize");
-		
-		setTimeout(function() {
-			ajax({url:"/note/add", 
-				method:"post", 
-				param:[
-					       {name:"idx", value:notes.length - 1-1}, 
-					       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
-					       {name:"color", value:color}
-				       ], 
-				success:function() {
-					reForm.children[0].click();
-				}
-			});
-		}, 500);
+		if(!ondeleting) {
+			var color = "rgb(" + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + "," + Math.floor(Math.random()*1000)%256 + ")";
+			
+			this.removeAttribute("style");
+			removeClass(this, "mock");
+			this.setAttribute("style", "--note-color:" + color);
+			
+			this.children[0].style.setProperty("--note-shadow-width", Number(getCssVar("note-standard-size").split("px")[0]) + "px");
+			this.children[0].style.setProperty("--note-shadow-height", Number(getCssVar("note-standard-size").split("px")[0]) * 1.5 + "px");
+			this.children[1].setAttribute("class", "note show-front");
+			
+			pusher.style.display = "inline-block";
+			shelf.insertBefore(pusher, this);
+			triggerEvent(window, "resize");
+			
+			setTimeout(function() {
+				ajax({url:"/note/add", 
+					method:"post", 
+					param:[
+						       {name:"idx", value:notes.length - 1-1}, 
+						       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
+						       {name:"color", value:color}
+					       ], 
+					success:function() {
+						reForm.children[0].click();
+					}
+				});
+			}, 500);
+		}
 	}
 	
 	alignNotes();
@@ -1389,65 +1391,6 @@ window.onload = function() {
 		$(".demo").css('width','5rem');
 		$(".demo").css('height','5rem');
 		
- 		// 오류상황 해제
- 		$('#nameColor input + span').css('color','#0077FF'); 
-		$('#nameColor .border').css('background','#0077FF');  
-		$('#nameColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#nameError").text("");
-		
-		$('#pwColor input + span').css('color','#0077FF'); 
-		$('#pwColor .border').css('background','#0077FF');
-		$('#pwColor input').css('border-bottom','2px solid #0077FF');
-		$("#pwError").text("");	
-		$('#pwCheck input + span').css('color','#0077FF'); 
-		$('#pwCheck .border').css('background','#0077FF');
-		$('#pwCheck input').css('border-bottom','2px solid #0077FF');
-		$("#pwckError").text("");
- 		
- 		$('#emailColor input + span').css('color','#0077FF'); 
-		$('#emailColor .border').css('background','#0077FF');  
-		$('#emailColor input').css('border-bottom','2px solid #0077FF'); 
-		$("#emailError").text("");
-		
-		// 창 변화
- 		$("#nameColor").css('opacity','0');	
- 		$("#nameError").css('opacity','0');
- 		$("#pwColor").css('opacity','0');
- 		$("#pwError").css('opacity','0');
- 		$("#pwCheck").css('opacity','0');
- 		$("#pwckError").css('opacity','0');
- 		$("#emailCheck").css('opacity','0');
- 		$("#emailError").css('opacity','0');
- 		$("#delMsg1").css('opacity','0');
- 		$("#delMsg2").css('opacity','0');
- 		$("#delMsg3").css('opacity','0');
- 		$("#back").css('opacity','0');
- 		$("#next").css('opacity','0');
- 		$("#confirming").css('opacity','0');
- 		
- 		$("#nameColor").css('display','none');
- 		$("#nameError").css('display','none');
- 		$("#pwColor").css('display','none');
- 		$("#pwError").css('display','none');
- 		$("#pwCheck").css('display','none');
- 		$("#pwckError").css('display','none');
- 		$("#emailColor").css('display','none');
- 		$("#emailError").css('display','none');
- 		$("#delMsg1").css('display','none');
- 		$("#delMsg2").css('display','none');
- 		$("#delMsg3").css('display','none');
- 		$("#back").css('display','none');
- 		$("#next").css('display','none');
- 		$("#confirming").css('display','none');
- 		
- 		setTimeout(function() {$(".myUser").css('display','block');}, 700);
- 		setTimeout(function() {$("#deleteuser").css('display','block');}, 700);
- 		setTimeout(function() {$("#logout").css('display','block');}, 700);
-
- 		setTimeout(function() {$(".myUser").css('opacity','1');}, 700);
- 		setTimeout(function() {$("#deleteuser").css('opacity','1');}, 700);
- 		setTimeout(function() {$("#logout").css('opacity','1');}, 700);
-		
 		setTimeout(function() {$('#icon').css('display','block');}, 700);
 		setTimeout(function() {$(".tomain").css('display','none');}, 700);
 	});
@@ -1472,7 +1415,7 @@ window.onload = function() {
 		transition-timing-function:ease;
 	}
 	.scene .meta {
-		display:none;
+		display:block;
 	}
 	.shelf {
 		position:fixed;

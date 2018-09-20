@@ -628,8 +628,9 @@ window.onload = function() {
 								shadow.style.setProperty("--note-shadow-width", stanSize * 1.25 * 0.15 + "px");
 								shadow.style.setProperty("--note-shadow-height", stanSize * 1.25 * 1.5 + "px");
 								
-								scene.style.left = ev.clientX - window.innerWidth / 10 - e.offsetX +"px";
-								scene.style.top = ev.clientY - window.innerHeight / 10 - e.offsetY + "px";
+								scene.style.position = "fixed";
+								scene.style.left = ev.clientX - e.offsetX +"px";
+								scene.style.top = ev.clientY - e.offsetY + "px";
 								scene.style.transitionDuration = "0s";
 							} else {
 								window.onmouseup = undefined;
@@ -782,6 +783,7 @@ window.onload = function() {
 											end = 0;
 										}, 500);
 										
+										scene.style.position = "absolute";
 										scene.style.removeProperty("--note-standard-size");
 										scene.style.removeProperty("z-index");
 										shadow.style.removeProperty("--shadow-width");
@@ -1432,6 +1434,26 @@ window.onload = function() {
 </script>
 <style>
 @import "/note/css/note.css";
+	/* width */
+	::-webkit-scrollbar {
+		left:100%;
+	    width: 10px;
+	}
+	
+	/* Track */
+	::-webkit-scrollbar-track {
+	    
+	}
+	
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: #D8D8D8;
+	}
+	
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+	    background: #D8D8D8;
+	}
 	.scene .shadow {
 		position:absolute;
 		
@@ -1459,6 +1481,8 @@ window.onload = function() {
 		
 		left:10%;
 		top:10%;
+		
+		overflow:auto;
 	}
 	.shelf .support {		
 		position:absolute;

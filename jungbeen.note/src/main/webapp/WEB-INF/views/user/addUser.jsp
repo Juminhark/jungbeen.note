@@ -313,7 +313,7 @@ $(function(){
 				data:$("#userData").serialize(),
 				success:function(result){
 					if(result){
-						window.location.href="http://localhost/note/main";
+						window.location.href="/note/";
 					}else{
 						alert("가입실패")
 					}

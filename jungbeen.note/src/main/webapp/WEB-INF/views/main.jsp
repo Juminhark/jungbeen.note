@@ -21,6 +21,8 @@ window.onload = function() {
 	//꼬이게 된다.
 	//그것을 막기 위한 변수이다.
 	var ondeleting = false;
+	
+	var onLifting = false;
 
 	var pm = document.getElementsByClassName("popup-menu")[0];
 	
@@ -586,27 +588,49 @@ window.onload = function() {
 					
 					var scene = this;
 					var note = scene.getElementsByClassName("note")[0];
-					scene.style.transitionDuration = "0s";
+					var shadow = scene.children[0];
 					
 					var isPicked;
 					
-					isPicked = true;
+					onLifting = true;
 					
 					var start = new Date();
 					var end = new Date();
 					
+					setTimeout(function() {
+						var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);
+						
+						if(onLifting && window.onmouseup != undefined) {
+							note.setAttribute("class", "note show-left");
+							
+							setTimeout(function() {
+								scene.style.setProperty("--note-standard-size", stanSize * 1.25 + "px");
+								scene.style.zIndex = "10";
+								
+								shadow.style.setProperty("--note-shadow-width", stanSize * 1.25 * 0.15 + "px");
+								shadow.style.setProperty("--note-shadow-height", stanSize * 1.25 * 1.5 + "px");
+								
+								isPicked = true;
+							}, 500);
+						}			
+					}, 250);
+										
 					window.onmousemove = function(ev) {
 						if(ev.which == 1) {
-							end = new Date();
 							var sel = window.getSelection();
 							sel.removeAllRanges();
 							
-							if(isPicked && end-start > 100) {
-
-								triggerEvent(note.parentElement, "mouseleave");
+							end = new Date();
+							if(isPicked && end-start > 250) {
+								var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);
+								
+								note.setAttribute("class", "note show-left");
+								shadow.style.setProperty("--note-shadow-width", stanSize * 1.25 * 0.15 + "px");
+								shadow.style.setProperty("--note-shadow-height", stanSize * 1.25 * 1.5 + "px");
 								
 								scene.style.left = ev.clientX - window.innerWidth / 10 - e.offsetX +"px";
 								scene.style.top = ev.clientY - window.innerHeight / 10 - e.offsetY + "px";
+								scene.style.transitionDuration = "0s";
 							} else {
 								window.onmouseup = undefined;
 								window.onmousemove = undefined;
@@ -627,9 +651,12 @@ window.onload = function() {
 					
 					window.onmouseup = function(ev) {
 						if(ev.which == 1) {
+							onLifting = false;
+							console.log("fds");
+
 							var end = new Date();
 							
-							if(isPicked && end - start > 100) {
+							if(isPicked && end - start > 250) {
 								scene.style.transitionDuration = "0.5s";
 								
 								//-----------------------------//
@@ -754,6 +781,13 @@ window.onload = function() {
 											start = 0;
 											end = 0;
 										}, 500);
+										
+										scene.style.removeProperty("--note-standard-size");
+										scene.style.removeProperty("z-index");
+										shadow.style.removeProperty("--shadow-width");
+										shadow.style.removeProperty("--shadow-height");
+										
+										triggerEvent(scene, "mouseleave");
 									},
 									fail:function() {
 										isLast = false;
@@ -829,7 +863,7 @@ window.onload = function() {
 			}
 		}
 	}
-	
+
 	window.onmessage = function(e) {
 		var note = notes[notes.length -1 -1 - Number(e.data)];
 		var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);

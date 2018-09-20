@@ -395,6 +395,7 @@ window.onload = function() {
 							var end = new Date();
 							
 							mistake = true;
+							ondeleting = false;
 							
 							setTimeout(function() {
 								for(var i = 0; i < notes.length; i++) {

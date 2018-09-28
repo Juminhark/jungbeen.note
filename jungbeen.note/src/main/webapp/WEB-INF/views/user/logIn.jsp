@@ -16,17 +16,20 @@ $(function(){
 	if($("#corId").text() == ""){
 		$(".inp.id").css('opacity','1');
 		$(".id.position").css('opacity','1');
-		setTimeout(function() {$inputId.focus();}, 700);
+		$("#plus").css('display','block');
+		setTimeout(function() {$("#plus").css('opacity','1');}, 700);
+		setTimeout(function() {$inputId.focus();}, 1000);
 	}else{
 		$(".id").css('display','none');
 		$(".pw").css('display','block');
 		$("#corId").css('opacity','1');
 		$(".inp.pw").css('opacity','1');
 		$(".pw.position").css('opacity','1');
-		setTimeout(function() {$inputPw.focus();}, 700);
+		$("#back").css('display','block');
+		setTimeout(function() {$("#back").css('opacity','1');}, 700);
+		setTimeout(function() {$inputPw.focus();}, 1000);
 	}
-	$("#plus").css('opacity','1');
-	$("#next").css('opacity','1');
+	setTimeout(function() {$("#next").css('opacity','1');}, 700);
 	
 	$inputId.bind("keydown", function(event) {
 		if(event.which == 13) {
@@ -66,10 +69,14 @@ $(function(){
 					if(result){
 						$(".inp.id").css('opacity','0');
 						$(".id.position").css('opacity','0');
+						$("#plus").css('opacity','0');
 						setTimeout(function() {$(".id").css('display','none');}, 600);
 						setTimeout(function() {$(".pw").css('display','block');}, 600);
+						setTimeout(function() {$("#plus").css('display','block');}, 600);
+						setTimeout(function() {$("#back").css('display','block');}, 600);
 						setTimeout(function() {$("#corId").css('opacity','1');}, 1000);
 						setTimeout(function() {$(".inp.pw").css('opacity','1');}, 1000);
+						setTimeout(function() {$("#back").css('opacity','1');}, 1000);
 						setTimeout(function() {$(".pw.position").css('opacity','1');}, 1000);
 						setTimeout(function() {$inputPw.focus();}, 1500);	
 						$("#corId").css('padding','0 0');
@@ -152,7 +159,6 @@ $(function(){
 		setTimeout(function() {window.location.href="http://localhost/note/addUser";}, 1000);
 	});
 	
-	
 	// 아이디찾기로 넘어가는 효과
 	$(".id.position").bind("click", function(){
 		$("#corId").css('opacity','0');
@@ -175,6 +181,18 @@ $(function(){
 		setTimeout(function() {$("#plus").css('opacity','0');}, 300);
 		setTimeout(function() {$("#next").css('opacity','0');}, 300);
 		setTimeout(function() {window.location.href="http://localhost/note/findPw";}, 1000);
+	});
+	
+	// 뒤로가기
+	$("#back").bind("click", function(){
+		$("#corId").css('opacity','0');
+		$(".inp").css('opacity','0');
+		$("#errorMsg").css('opacity','0');
+		
+		setTimeout(function() {$(".position").css('opacity','0');}, 300);
+		setTimeout(function() {$("#back").css('opacity','0');}, 300);
+		setTimeout(function() {$("#next").css('opacity','0');}, 300);
+		setTimeout(function() {window.location.href="http://localhost/note/logout";}, 1000);	
 	});
 })
 </script>
@@ -215,6 +233,17 @@ position : absolute;
 	transition-duration:1s;
 }
 #plus{
+	display : none;
+	position : absolute;
+	left : 5rem;
+	top : 23rem;
+	border :none;
+	background-color : transparent;
+	opacity: 0;
+	transition-duration:1s;
+}
+#back{
+	display : none;
 	position : absolute;
 	left : 5rem;
 	top : 23rem;
@@ -256,7 +285,6 @@ position : absolute;
 				session.setAttribute("userId",cookie.getValue());
 			}
 		};
-
 %>
 <div class="cont">
 	<div class="demo">
@@ -275,6 +303,7 @@ position : absolute;
 	
 			
 			<button type="button" id="plus"><img src="img/plus.png"></button>
+			<button type="button" id="back"><img src="img/back.png"></button>
 			<button type="button" id="next"><img src="/note/img/next.png"></button>
 		</div>
 	</div>

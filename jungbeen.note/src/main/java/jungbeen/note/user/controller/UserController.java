@@ -76,7 +76,6 @@ public class UserController {
 				if(cookie.getName().equals("userId")) {
 					User corUser = userService.findUser(cookie.getValue());
 					request.getSession().setAttribute("corUser", corUser);
-					System.out.println(cookie.getValue());
 				}
 		
 		if(userPw != null && !userPw.equals("")){	
@@ -207,11 +206,10 @@ public class UserController {
 	@ResponseBody
 	public boolean findPw(HttpServletRequest request){
 		boolean result = false;
-		String userName = request.getParameter("userName");
-		List<User> corUsers = userService.findIds(userName);
-		// userName을 갖는 list를 가져왔으니 session에 저장해놓고 나중에 입력된 이메일을 가지고 있는 1명을 찾아낸다
-		if(!corUsers.isEmpty()){		
-			request.getSession().setAttribute("corUsers", corUsers);		
+		String userName = request.getParameter("userName");	
+		User corUser = (User)request.getSession().getAttribute("corUser");
+		// .equals() : string값을 비교  /  == type을 비교한다
+		if(corUser.getUserName().equals(userName)){		
 			result = true;	
 		}else{
 			result = false;
@@ -224,24 +222,18 @@ public class UserController {
 	public boolean SendEmail(HttpServletRequest request){
 		boolean result = false;
 		String userEmail = request.getParameter("userEmail");		
-		List<User> corUsers = (List<User>)request.getSession().getAttribute("corUsers");
-		for(User corUser : corUsers){
-
-			if(userEmail.equals(corUser.getUserEmail())){
-				
-				request.getSession().setAttribute("corUser", corUser);
-				
-				String toEmail = corUser.getUserEmail();
-				String subject = "note 비밀번호입니다.";
-				String txt = corUser.getUserId() + "님의 비밀번호는 " + corUser.getUserPw() + " 입니다.";
-
-				Message msg = new Message(toEmail, subject, txt);
-				mailService.send(msg);
-				result = true; break;
-			}else{
-				result = false;
-			}
-		}
+		User corUser = (User)request.getSession().getAttribute("corUser");
+			
+		if(corUser.getUserEmail().equals(userEmail)){
+			String toEmail = corUser.getUserEmail();
+			String subject = "note 비밀번호입니다.";
+			String txt = corUser.getUserId() + "님의 비밀번호는 " + corUser.getUserPw() + " 입니다.";
+			Message msg = new Message(toEmail, subject, txt);
+			mailService.send(msg);
+			result = true;
+		}else{
+			result = false;
+		}	
 		return result;
 	}
 	

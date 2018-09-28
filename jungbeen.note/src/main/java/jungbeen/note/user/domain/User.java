@@ -5,7 +5,6 @@ public class User {
 	private String userPw;
 	private String userName;
 	private String userEmail;
-	private String userImg;
 	
 	public User(){}
 	
@@ -39,14 +38,6 @@ public class User {
 	}
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
-	}
-
-	public String getUserImg() {
-		return userImg;
-	}
-
-	public void setUserImg(String userImg) {
-		this.userImg = userImg;
 	}
 	
 	public String toString(){

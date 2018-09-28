@@ -85,12 +85,12 @@ $(function(){
 						$('.inp .border').css('background','#0077FF');
 						$('.inp input').css('border-bottom','2px solid #0077FF');
 						
-					// db에 이름이 저장되어있지않을때
+					// db에 저장된 이름과 같지 않을때
 					}else{
 						$('.inp input:focus + span').css('color','#a30404'); 
 						$('.inp .border').css('background','#a30404');
 						$('.inp input').css('border-bottom','2px solid #a30404');
-						$("#errorMsg").text("등록된 이름이 없습니다");
+						$("#errorMsg").text("등록된 이름이 아닙니다");
 					}
 				},
 				error:function(){

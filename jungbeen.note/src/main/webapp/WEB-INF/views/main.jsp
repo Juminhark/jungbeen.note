@@ -595,244 +595,196 @@ window.onload = function() {
 			}
 			
 			notes[i].parentElement.onmousedown = function(e) {
-				if(e.which == 1) {
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				
+				var scene = this;
+				var note = scene.getElementsByClassName("note")[0];
+				var shadow = scene.getElementsByClassName("shadow")[0];
+				
+				var isPicked;
+				var isMovingOut;
+				
+				if(notes.length > 3)
+					isPicked = true;
+				
+				scene.style.zIndex = "10";
+									
+				window.onmousemove = function(ev) {
 					var sel = window.getSelection();
 					sel.removeAllRanges();
 					
-					var scene = this;
-					var note = scene.getElementsByClassName("note")[0];
-					var shadow = scene.children[0];
+					var left = scene.getBoundingClientRect().left;
+					var top = scene.getBoundingClientRect().top;
+					var right = scene.getBoundingClientRect().right;
+					var bottom = scene.getBoundingClientRect().bottom;
 					
-					var isPicked;
+					var x = ev.clientX;
+					var y = ev.clientY;
 					
-					onLifting = true;
+					isMovingOut = true;
+					if(left < x && x < right)
+						if(top < y && y < bottom)
+							isMovingOut = false;
 					
-					var start = new Date();
-					var end = new Date();
-					
-					setTimeout(function() {
-						var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);
+					if(isPicked && isMovingOut) {
+						scene.style.left = x - window.innerWidth / 10 + "px";
+						scene.style.top = y - window.innerHeight / 10 + "px";
 						
-						if(onLifting && window.onmouseup != undefined) {
-							note.setAttribute("class", "note show-left");
-							
-							setTimeout(function() {
-								scene.style.setProperty("--note-standard-size", stanSize * 1.25 + "px");
-								scene.style.zIndex = "10";
-								
-								shadow.style.setProperty("--note-shadow-width", stanSize * 1.25 * 0.15 + "px");
-								shadow.style.setProperty("--note-shadow-height", stanSize * 1.25 * 1.5 + "px");
-								
-								isPicked = true;
-							}, 500);
-						}			
-					}, 250);
-										
-					window.onmousemove = function(ev) {
-						if(ev.which == 1) {
-							var sel = window.getSelection();
-							sel.removeAllRanges();
-							
-							end = new Date();
-							if(isPicked && end-start > 250) {
-								var stanSize = Number(getCssVar("note-standard-size").split("px")[0]);
-								
-								note.setAttribute("class", "note show-left");
-								shadow.style.setProperty("--note-shadow-width", stanSize * 1.25 * 0.15 + "px");
-								shadow.style.setProperty("--note-shadow-height", stanSize * 1.25 * 1.5 + "px");
-								
-								scene.style.position = "fixed";
-								scene.style.left = ev.clientX - e.offsetX +"px";
-								scene.style.top = ev.clientY - e.offsetY + "px";
-								scene.style.transitionDuration = "0s";
-							} else {
-								window.onmouseup = undefined;
-								window.onmousemove = undefined;
-								triggerEvent(window, "resize");
-								scene.style.transitionDuration = "0.5s";
-								start = 0;
-								end = 0;
-							}
-						} else {
-							window.onmouseup = undefined;
-							window.onmousemove = undefined;
-							triggerEvent(window, "resize");
-							scene.style.transitionDuration = "0.5s";
-							start = 0;
-							end = 0;
-						}
+						scene.style.transitionDuration = "0s";
 					}
-					
-					window.onmouseup = function(ev) {
-						if(ev.which == 1) {
-							onLifting = false;
-							console.log("fds");
+				}
+				
+				window.onmouseup = function(ev) {
+					if(isPicked && isMovingOut) {
+						scene.style.transitionDuration = "0.5s";
+						
+						//-----------------------------//
+						var ex = ev.clientX;
+						var ey = ev.clientY;
+						
+						//c : closest 
+						//cc : closest coordinate
+						//1 : most
+						//2 : second
+						var log = {c1:"", c2:"", c1c:999999999999, c2c:9999999999999};
+						for(var j = 0; j < notes.length; j++) {
+							if(notes[j] != note 
+									&& j != notes.length-1) {//pusher는 거른다.
+								//노트의 크기
+								var w = notes[j].getBoundingClientRect().right - notes[j].getBoundingClientRect().left;
+								var h = notes[j].getBoundingClientRect().bottom - notes[j].getBoundingClientRect().top;
+								
+								//노트의 중심 좌표
+								var x = notes[j].getBoundingClientRect().left + w / 2;
+								var y = notes[j].getBoundingClientRect().top + h / 2;
+								
+								var l = Math.cbrt(Math.pow((ex - x), 2) + Math.pow((ey - y), 2));
+								
+								if(log.c1c > l) {
+									log.c2 = log.c1;
+									log.c1 = notes[j];
+									
+									log.c2c = log.c1c;
+									log.c1c = l;
+								} else if(log.c2c > l) {
+									log.c2 = notes[j];
+									
+									log.c2c = l;
+								}
+							}
+						}
+						
+						
+						var isLast = false;
+						
+						//between length
+						var bl = Math.abs(log.c1.getBoundingClientRect().right - log.c2.getBoundingClientRect().right);
+						if(log.c1 == notes[notes.length-1 -1/*#pusher는 계수하지 않는다.*/] && log.c2c > log.c1c)
+							isLast = true;
 
-							var end = new Date();
-							
-							if(isPicked && end - start > 250) {
-								scene.style.transitionDuration = "0.5s";
-								
-								//-----------------------------//
-								var ex = ev.clientX;
-								var ey = ev.clientY;
-								
-								//c : closest 
-								//cc : closest coordinate
-								//1 : most
-								//2 : second
-								var log = {c1:"", c2:"", c1c:999999999999, c2c:9999999999999};
-								for(var j = 0; j < notes.length; j++) {
-									if(notes[j] != note 
-											&& j != notes.length-1) {//pusher는 거른다.
-										//노트의 크기
-										var w = notes[j].getBoundingClientRect().right - notes[j].getBoundingClientRect().left;
-										var h = notes[j].getBoundingClientRect().bottom - notes[j].getBoundingClientRect().top;
+						//origin index
+						var oi = Number(note.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+
+						var c1i, c2i;
+						if(!log.c1.children[0].classList.contains("mock"))
+							c1i = Number(log.c1.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+						else
+							c1i = notes.length-1-1;
+						
+						if(!log.c2.children[0].classList.contains("mock"))
+							c2i = Number(log.c2.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
+						else
+							c2i = notes.length-1-1;
+						
+						//change index
+						var ci;
+						
+						if(isLast) {
+							shelf.appendChild(scene);
+							ci = c1i;
+						} else if(c1i < c2i) {
+							shelf.insertBefore(scene, log.c1.parentElement);
+							ci = c1i;
+						} else {
+							shelf.insertBefore(scene, log.c2.parentElement);
+							ci = c2i;
+						}
+						
+						//#pusher는 항상 마지막에 와야한다.
+						shelf.appendChild(pusher);
+						//-----------------------------//
+					
+						var noteId = Number(note.nextElementSibling.getElementsByClassName("id")[0].innerText.trim());
+
+						ajax({url:"/note/reAlign", 
+							method:"post", 
+							param:[
+								       {name:"originIdx", value:oi}, 
+								       {name:"changeIdx", value:ci},
+								       {name:"noteId", value:noteId},
+								       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
+								       {name:"isLast", value:isLast}
+							       ], 
+							success:function() {
+								setTimeout(function() {
+									//reForm.children[0].click();	
+									var scenes = document.getElementsByClassName("scene");
+									for(var s = 1; s < scenes.length-1; s++) {
+										var sId = scenes[s].getElementsByClassName("id")[0];
+										var sIdx = scenes[s].getElementsByClassName("idx")[0];
+										var id = Number(sId.innerText.trim());
+										var idx = Number(sIdx.innerText.trim());
 										
-										//노트의 중심 좌표
-										var x = notes[j].getBoundingClientRect().left + w / 2;
-										var y = notes[j].getBoundingClientRect().top + h / 2;
-										
-										var l = Math.cbrt(Math.pow((ex - x), 2) + Math.pow((ey - y), 2));
-										
-										if(log.c1c > l) {
-											log.c2 = log.c1;
-											log.c1 = notes[j];
-											
-											log.c2c = log.c1c;
-											log.c1c = l;
-										} else if(log.c2c > l) {
-											log.c2 = notes[j];
-											
-											log.c2c = l;
+										if(id != noteId) {
+											if(isLast) {
+												if(ci <= idx && idx <= oi-1)
+													sIdx.innerText = idx+1;
+											} else if(oi < ci) {
+												if(oi+1 <= idx && idx <= ci)
+													sIdx.innerText = idx-1;
+											} else if(oi > ci) {
+												if(ci+1 <= idx && idx <= oi-1)
+													sIdx.innerText = idx+1;
+											}
+										} else {
+											sIdx.innerText = oi < ci || isLast ? ci : ci+1;
 										}
 									}
-								}
-								
-								
-								var isLast = false;
-								
-								//between length
-								var bl = Math.abs(log.c1.getBoundingClientRect().right - log.c2.getBoundingClientRect().right);
-								if(log.c1 == notes[notes.length-1 -1/*#pusher는 계수하지 않는다.*/] && log.c2c > log.c1c)
-									isLast = true;
+									
+									isLast = false;
 
-								//origin index
-								var oi = Number(note.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-
-								var c1i, c2i;
-								if(!log.c1.children[0].classList.contains("mock"))
-									c1i = Number(log.c1.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-								else
-									c1i = notes.length-1-1;
-								
-								if(!log.c2.children[0].classList.contains("mock"))
-									c2i = Number(log.c2.nextElementSibling.getElementsByClassName("idx")[0].innerText.trim());
-								else
-									c2i = notes.length-1-1;
-								
-								//change index
-								var ci;
-								
-								if(isLast) {
-									shelf.appendChild(scene);
-									ci = c1i;
-								} else if(c1i < c2i) {
-									shelf.insertBefore(scene, log.c1.parentElement);
-									ci = c1i;
-								} else {
-									shelf.insertBefore(scene, log.c2.parentElement);
-									ci = c2i;
-								}
-								
-								//#pusher는 항상 마지막에 와야한다.
-								shelf.appendChild(pusher);
-								//-----------------------------//
-							
-								var noteId = Number(note.nextElementSibling.getElementsByClassName("id")[0].innerText.trim());
-		
-								ajax({url:"/note/reAlign", 
-									method:"post", 
-									param:[
-										       {name:"originIdx", value:oi}, 
-										       {name:"changeIdx", value:ci},
-										       {name:"noteId", value:noteId},
-										       {name:"userId", value:"<%= request.getAttribute("userId") %>"},
-										       {name:"isLast", value:isLast}
-									       ], 
-									success:function() {
-										setTimeout(function() {
-											//reForm.children[0].click();	
-											var scenes = document.getElementsByClassName("scene");
-											for(var s = 1; s < scenes.length-1; s++) {
-												var sId = scenes[s].getElementsByClassName("id")[0];
-												var sIdx = scenes[s].getElementsByClassName("idx")[0];
-												var id = Number(sId.innerText.trim());
-												var idx = Number(sIdx.innerText.trim());
-												
-												if(id != noteId) {
-													if(isLast) {
-														if(ci <= idx && idx <= oi-1)
-															sIdx.innerText = idx+1;
-													} else if(oi < ci) {
-														if(oi+1 <= idx && idx <= ci)
-															sIdx.innerText = idx-1;
-													} else if(oi > ci) {
-														if(ci+1 <= idx && idx <= oi-1)
-															sIdx.innerText = idx+1;
-													}
-												} else {
-													sIdx.innerText = oi < ci || isLast ? ci : ci+1;
-												}
-											}
-											
-											isLast = false;
-
-											window.onmouseup = undefined;
-											window.onmousemove = undefined;
-											triggerEvent(window, "resize");
-											scene.style.transitionDuration = "0.5s";
-											start = 0;
-											end = 0;
-										}, 500);
-										
-										scene.style.removeProperty("--note-standard-size");
-										scene.style.removeProperty("z-index");
-										scene.style.position = "absolute";
-										shadow.style.removeProperty("--shadow-width");
-										shadow.style.removeProperty("--shadow-height");
-										
-										triggerEvent(scene, "mouseleave");
-									},
-									fail:function() {
-										isLast = false;
-									}
-								});
-								
-								window.onmouseup = undefined;
-								window.onmousemove = undefined;
-								triggerEvent(window, "resize");
-								scene.style.transitionDuration = "0.5s";
-								start = 0;
-								end = 0;
-								
-								isPicked = false;
-							} else {
-								window.onmouseup = undefined;
-								window.onmousemove = undefined;
-								triggerEvent(window, "resize");
-								scene.style.transitionDuration = "0.5s";
-								start = 0;
-								end = 0;
+									window.onmouseup = undefined;
+									window.onmousemove = undefined;
+									
+									triggerEvent(window, "resize");
+									
+									scene.style.transitionDuration = "0.5s";
+									scene.style.removeProperty("z-index");
+								}, 500);
+							},
+							fail:function() {
+								isLast = false;
 							}
-						} else {
-							window.onmouseup = undefined;
-							window.onmousemove = undefined;
-							triggerEvent(window, "resize");
-							scene.style.transitionDuration = "0.5s";
-							start = 0;
-							end = 0;
-						}
+						});
+						
+						window.onmouseup = undefined;
+						window.onmousemove = undefined;
+						
+						triggerEvent(window, "resize");
+						
+						scene.style.transitionDuration = "0.5s";
+						scene.style.removeProperty("z-index");
+						
+						isPicked = false;
+					} else {
+						window.onmouseup = undefined;
+						window.onmousemove = undefined;
+						
+						triggerEvent(window, "resize");
+						
+						scene.style.transitionDuration = "0.5s";
+						scene.style.removeProperty("z-index");
 					}
 				}
 			}

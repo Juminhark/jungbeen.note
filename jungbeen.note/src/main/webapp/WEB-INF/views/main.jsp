@@ -1392,6 +1392,8 @@ window.onload = function() {
 		$(".demo").css('width','5rem');
 		$(".demo").css('height','5rem');
 		
+		$("#back").trigger("click");
+		
 		setTimeout(function() {$('#icon').css('display','block');}, 700);
 		setTimeout(function() {$(".tomain").css('display','none');}, 700);
 	});
